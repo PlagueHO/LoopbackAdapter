@@ -1,3 +1,5 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/qb67s7iw1jp7e32t/branch/master?svg=true)](https://ci.appveyor.com/project/PlagueHO/loopbackadapter/branch/master)
+
 LoopbackAdapter
 ===============
 A PowerShell module for creating and removing Loopback Network Adapters on Windows using Device Conslole (DevCon.exe).
