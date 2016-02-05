@@ -34,27 +34,25 @@ deploy_script:
   - ps: |
       # Creating project artifact
       $stagingDirectory = (Resolve-Path ..).Path
+      $ModuleDirectory = (Join-Path -Path $stagingDirectory -ChildPath 'LoopbackAdapter')
+      New-Item -Path $ModuleDirectory -Type Directory
+      $VersionDirectory = (Join-Path -Path $ModuleDirectory -ChildPath $ENV:APPVEYOR_BUILD_VERSION)
+      New-Item -Path $VersionDirectory -Type Directory
       
-      # Cleanup staging directory
-      Remove-Item -Path (Join-Path -Path $pwd -ChildPath '.git') -Recurse -Force
-      Remove-Item -Path (Join-Path -Path $pwd -ChildPath '.gitignore') -Force
-      Remove-Item -Path (Join-Path -Path $pwd -ChildPath 'DSCResource.Tests') -Recurse -Force
+      # Populate Version directory
+      Copy-Item -Path .\LoopbackAdapter.* -Destination $VersionDirectory
+      Copy-Item -Path .\LICENSE -Destination $VersionDirectory
+      Copy-Item -Path .\README.MD -Destination $VersionDirectory
 
       # Set version number
-      $manifest = Join-Path -Path $pwd -ChildPath "LoopbackAdapter.psd1"
+      $manifest = Join-Path -Path $VersionDirectory -ChildPath "LoopbackAdapter.psd1"
       (Get-Content $manifest -Raw).Replace("1.0.0.0", $env:APPVEYOR_BUILD_VERSION) | Out-File $manifest
       
       # Create zip artifact
       $zipFilePath = Join-Path -Path $stagingDirectory -ChildPath "${env:APPVEYOR_PROJECT_NAME}_${env:APPVEYOR_BUILD_VERSION}.zip"
       Add-Type -assemblyname System.IO.Compression.FileSystem
-      [System.IO.Compression.ZipFile]::CreateFromDirectory($pwd, $zipFilePath)
-      
-      # Creating NuGet package artifact
-      New-Nuspec -packageName $env:APPVEYOR_PROJECT_NAME -version $env:APPVEYOR_BUILD_VERSION -author "Daniel Scott-Raynsford" -owners "Daniel Scott-Raynsford" -licenseUrl "https://github.com/$($env:APPVEYOR_REPO_NAME)/blob/master/LICENSE" -projectUrl "https://github.com/$($env:APPVEYOR_REPO_NAME)" -packageDescription $env:APPVEYOR_PROJECT_NAME -tags "Loopback Network Adapter" -destinationPath .
-      nuget pack ".\$($env:APPVEYOR_PROJECT_NAME).nuspec" -outputdirectory .
-      $nuGetPackageName = $env:APPVEYOR_PROJECT_NAME + "." + $env:APPVEYOR_BUILD_VERSION + ".nupkg"
-      $nuGetPackagePath = (Get-ChildItem $nuGetPackageName).FullName
-      
+      [System.IO.Compression.ZipFile]::CreateFromDirectory($ModuleDirectory, $zipFilePath)
+            
       # Create Publish Script Artifact
       $PublishScriptName = $env:APPVEYOR_PROJECT_NAME + "." + $env:APPVEYOR_BUILD_VERSION + "_publish.ps1"
       $PublishScriptPath = Join-Path -Path $StagingDirectory -ChildPath $PublishScriptName
@@ -63,7 +61,6 @@ deploy_script:
       @(
           # You can add other artifacts here
           $zipFilePath,
-          $nuGetPackagePath,
           $PublishScriptPath
       ) | % { 
           Write-Host "Pushing package $_ as Appveyor artifact"
