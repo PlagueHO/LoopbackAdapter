@@ -53,7 +53,7 @@ deploy_script:
       # Create zip artifact
       $zipFilePath = Join-Path -Path $StagingFolder -ChildPath "${env:APPVEYOR_PROJECT_NAME}_${env:APPVEYOR_BUILD_VERSION}.zip"
       Add-Type -assemblyname System.IO.Compression.FileSystem
-      [System.IO.Compression.ZipFile]::CreateFromFolder($buildFolder, $zipFilePath)\
+      [System.IO.Compression.ZipFile]::CreateFromFolder($buildFolder, $zipFilePath)
       
       # Remove Staging Folder
       Remove-Item -Path $StagingFolder -Recurse -Force
