@@ -3,6 +3,9 @@
 #---------------------------------# 
 os: WMF 5
 version: 1.0.0.{build}
+environment:
+  PowerShellGalleryApiKey:
+    secure: 3fXfDuds8yhTa7WTOLIEhytrpsej9kcP+4rPrgLaFVmIhimmc+FgUVxkR4u468LH
 install: 
   - cinst -y pester
 
@@ -71,6 +74,9 @@ deploy_script:
           Write-Host "Pushing package $_ as Appveyor artifact"
           Push-AppveyorArtifact $_
       }
-        
 
-
+      # If this is a build of the Master branch and not a PR push
+      # then publish the Module to the PowerShell Gallery.
+      Write-Host "$($ENV:APPVEYOR_PULL_REQUEST_NUMBER)"
+      Write-Host "$($ENV:APPVEYOR_REPO_BRANCH)"
+      
