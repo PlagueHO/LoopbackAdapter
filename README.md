@@ -34,8 +34,8 @@ Usage Example
 -------------
 ```powershell
 Import-Module -Name LoopbackAdapter
-New-LoopbackAdapter -AdapterName 'LoopbackAdapter1'
-New-LoopbackAdapter -AdapterName 'LoopbackAdapter2'
+New-LoopbackAdapter -Name 'LoopbackAdapter1'
+New-LoopbackAdapter -Name 'LoopbackAdapter2'
 ```
 The above example will install two Loopback Adapters called LoopbackAdapter1 and LoopbackAdapter2
 
@@ -48,24 +48,51 @@ Functions
 Install a new Loopback Network Adapter.
 
 **.DESCRIPTION**
-Uses Chocolatey to download the DevCon (Windows Device Console) package and 
-uses it to install a new Loopback Network Adapter with the name specified.
+Uses Chocolatey to download the DevCon (Windows Device Console) package and uses it to install a new Loopback Network Adapter with the name specified.
 The Loopback Adapter will need to be configured like any other adapter (e.g. configure IP and DNS)
 
-**.PARAMETER AdapterName**
-The name of the Loopback Adapter to create. Defaults to 'Loopback'.
+**.PARAMETER Name**
+The name of the Loopback Adapter to create.
 
 **.PARAMETER Force**
 Force the install of Chocolatey and the Devcon.portable pacakge if not already installed, without confirming with the user.
 
 **.EXAMPLE**
 ```powershell
-$Adapter = New-LoopbackAdapter -AdapterName 'MyNewLoopback'
+$Adapter = New-LoopbackAdapter -Name 'MyNewLoopback'
 ```
 Creates a new Loopback Adapter called MyNewLoopback.
 
 **.OUTPUTS**
 Returns the newly created Loopback Adapter.
+
+**.COMPONENT**
+LoopbackAdapter
+
+
+### _Get-LoopbackAdapter_
+
+**.SYNOPSIS**
+Returns a specified Loopback Network Adapter or all Loopback Adapters.
+
+**.DESCRIPTION**
+This function will return either the Loopback Adapter specified in the $Name parameter or all Loopback Adapters.
+It will only return adapters that use the Microsoft KM-TEST Loopback Adapter driver.
+   
+This function does not use Chocolatey or the DevCon (Device Console) application, so does not require administrator access.
+
+**.PARAMETER Name**
+The name of the Loopback Adapter to return.
+If not specified all Loopback Adapters will be returned.
+
+**.EXAMPLE**
+```powershell
+$Adapter = Get-LoopbackAdapter -Name 'MyNewLoopback'
+```
+Returns the Loopback Adapter called MyNewLoopback. If this Loopback Adapter does not exist or does not use the Microsoft KM-TEST Loopback Adapter driver then an exception will be thrown.
+
+**.OUTPUTS**
+Returns a specific Loopback Adapter or all Loopback adapters.
 
 **.COMPONENT**
 LoopbackAdapter
@@ -80,15 +107,15 @@ Uninstall an existing Loopback Network Adapter.
 Uses Chocolatey to download the DevCon (Windows Device Console) package and 
 uses it to uninstall a new Loopback Network Adapter with the name specified.
 
-**.PARAMETER AdapterName**
-The name of the Loopback Adapter to create. Defaults to 'Loopback'.
+**.PARAMETER Name**
+The name of the Loopback Adapter to create.
 
 **.PARAMETER Force**
 Force the install of Chocolatey and the Devcon.portable pacakge if not already installed, without confirming with the user.
 
 **.EXAMPLE**
 ```powershell
-Remove-LoopbackAdapter -AdapterName 'MyNewLoopback'
+Remove-LoopbackAdapter -Name 'MyNewLoopback'
 ```
 Removes an existing Loopback Adapter called MyNewLoopback.
 
