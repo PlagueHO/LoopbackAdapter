@@ -57,10 +57,7 @@ deploy_script:
       $zipFilePath = Join-Path -Path $buildFolder -ChildPath "${env:APPVEYOR_PROJECT_NAME}_${env:APPVEYOR_BUILD_VERSION}.zip"
       $null = Add-Type -assemblyname System.IO.Compression.FileSystem
       [System.IO.Compression.ZipFile]::CreateFromDirectory($StagingFolder, $zipFilePath)
-      
-      # Remove Staging Folder
-      $null = Remove-Item -Path $StagingFolder -Recurse -Force
-            
+                  
       # Create Publish Script Artifact
       $PublishScriptName = $env:APPVEYOR_PROJECT_NAME + "." + $env:APPVEYOR_BUILD_VERSION + "_publish.ps1"
       $PublishScriptPath = Join-Path -Path $buildFolder -ChildPath $PublishScriptName
@@ -84,3 +81,5 @@ deploy_script:
         Publish-Module -Name 'LoopbackAdapter' -RequiredVersion ${env:APPVEYOR_BUILD_VERSION} -NuGetApiKey $ENV:PowerShellGalleryApiKey
       }
       
+      # Remove Staging Folder
+      $null = Remove-Item -Path $StagingFolder -Recurse -Force
