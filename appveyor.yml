@@ -35,16 +35,16 @@ deploy_script:
       # Creating project artifact
       $buildFolder = $ENV:APPVEYOR_BUILD_FOLDER
       $StagingFolder = Join-Path -Path $buildFolder -ChildPath 'Staging'
-      New-Item -Path $StagingFolder -Type directory
+      $null = New-Item -Path $StagingFolder -Type directory
       $ModuleFolder = Join-Path -Path $StagingFolder -ChildPath 'LoopbackAdapter'
-      New-Item -Path $ModuleFolder -Type directory
+      $null = New-Item -Path $ModuleFolder -Type directory
       $VersionFolder = Join-Path -Path $ModuleFolder -ChildPath $ENV:APPVEYOR_BUILD_VERSION
-      New-Item -Path $VersionFolder -Type directory
+      $null = New-Item -Path $VersionFolder -Type directory
       
       # Populate Version Folder
-      Copy-Item -Path (Join-Path -Path $buildFolder -ChildPath 'LoopbackAdapter.*') -Destination $VersionFolder
-      Copy-Item -Path (Join-Path -Path $buildFolder -ChildPath 'LICENSE') -Destination $VersionFolder
-      Copy-Item -Path (Join-Path -Path $buildFolder -ChildPath 'README.MD') -Destination $VersionFolder
+      $null = Copy-Item -Path (Join-Path -Path $buildFolder -ChildPath 'LoopbackAdapter.*') -Destination $VersionFolder
+      $null = Copy-Item -Path (Join-Path -Path $buildFolder -ChildPath 'LICENSE') -Destination $VersionFolder
+      $null = Copy-Item -Path (Join-Path -Path $buildFolder -ChildPath 'README.MD') -Destination $VersionFolder
 
       # Set version number
       $manifest = Join-Path -Path $VersionFolder -ChildPath "LoopbackAdapter.psd1"
@@ -52,11 +52,11 @@ deploy_script:
       
       # Create zip artifact
       $zipFilePath = Join-Path -Path $StagingFolder -ChildPath "${env:APPVEYOR_PROJECT_NAME}_${env:APPVEYOR_BUILD_VERSION}.zip"
-      Add-Type -assemblyname System.IO.Compression.FileSystem
-      [System.IO.Compression.ZipFile]::CreateFromDirectory($buildFolder, $zipFilePath)
+      $null = Add-Type -assemblyname System.IO.Compression.FileSystem
+      [System.IO.Compression.ZipFile]::CreateFromDirectory($StagingFolder, $zipFilePath)
       
       # Remove Staging Folder
-      Remove-Item -Path $StagingFolder -Recurse -Force
+      $null = Remove-Item -Path $StagingFolder -Recurse -Force
             
       # Create Publish Script Artifact
       $PublishScriptName = $env:APPVEYOR_PROJECT_NAME + "." + $env:APPVEYOR_BUILD_VERSION + "_publish.ps1"
