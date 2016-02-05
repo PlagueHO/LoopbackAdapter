@@ -78,7 +78,7 @@ deploy_script:
       {
         Write-Host "Publishing Module to PowerShell Gallery"
         Copy-Item -Path $ModuleFolder -Destination ($ENV:PSModulePath -split ';')[0]
-        Publish-Module -Name 'LoopbackAdapter' -RequiredVersion ${env:APPVEYOR_BUILD_VERSION} -NuGetApiKey $ENV:PowerShellGalleryApiKey
+        Publish-Module -Name 'LoopbackAdapter' -RequiredVersion ${env:APPVEYOR_BUILD_VERSION} -NuGetApiKey $ENV:PowerShellGalleryApiKey -Confirm:$false
       }
       
       # Remove Staging Folder
