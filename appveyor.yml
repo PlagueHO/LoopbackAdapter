@@ -8,7 +8,28 @@ environment:
     secure: 3fXfDuds8yhTa7WTOLIEhytrpsej9kcP+4rPrgLaFVmIhimmc+FgUVxkR4u468LH
 install: 
   - cinst -y pester
+  - ps: |
+      # Update AppVeyor Build Version by pulling from Manifest
+      $ManifestPath = Join-Path -Path $ENV:APPVEYOR_BUILD_FOLDER -ChildPath "${ENV:APPVEYOR_PROJECT_NAME}.psd1"
+      $ManifestContent = Get-Content -Path $ManifestPath -Raw
 
+      $Regex = '(?<=ModuleVersion\s+=\s+'')(?<ModuleVersion>.*)(?='')'
+      $Matches = @([regex]::matches($ManifestContent, $Regex, 'IgnoreCase'))
+      $version = $null
+      if ($Matches)
+      {
+          $version = $Matches[0].Value
+      }
+
+      # new version
+      $version = "$version.$env:APPVEYOR_BUILD_NUMBER"
+
+      # update AppVeyor build
+      Update-AppveyorBuild -Version $version
+
+      # Set version number
+      $ManifestContent = $ManifestContent -replace '(?<=ModuleVersion\s+=\s+'')(?<ModuleVersion>.*)(?='')', ('${{ModuleVersion}}.{0}' -f $ENV:APPVEYOR_BUILD_NUMBER)
+      Set-Content -Path $ManifestPath -Value $ManifestContent
 #---------------------------------# 
 #      build configuration        # 
 #---------------------------------# 
@@ -39,29 +60,25 @@ deploy_script:
       $buildFolder = $ENV:APPVEYOR_BUILD_FOLDER
       $StagingFolder = Join-Path -Path $buildFolder -ChildPath 'Staging'
       $null = New-Item -Path $StagingFolder -Type directory
-      $ModuleFolder = Join-Path -Path $StagingFolder -ChildPath 'LoopbackAdapter'
+      $ModuleFolder = Join-Path -Path $StagingFolder -ChildPath $ENV:APPVEYOR_PROJECT_NAME
       $null = New-Item -Path $ModuleFolder -Type directory
       $VersionFolder = Join-Path -Path $ModuleFolder -ChildPath $ENV:APPVEYOR_BUILD_VERSION
       $null = New-Item -Path $VersionFolder -Type directory
       
       # Populate Version Folder
-      $null = Copy-Item -Path (Join-Path -Path $buildFolder -ChildPath 'LoopbackAdapter.*') -Destination $VersionFolder
+      $null = Copy-Item -Path (Join-Path -Path $buildFolder -ChildPath "{$ENV:APPVEYOR_PROJECT_NAME}.*") -Destination $VersionFolder
       $null = Copy-Item -Path (Join-Path -Path $buildFolder -ChildPath 'LICENSE') -Destination $VersionFolder
       $null = Copy-Item -Path (Join-Path -Path $buildFolder -ChildPath 'README.MD') -Destination $VersionFolder
 
-      # Set version number
-      $manifest = Join-Path -Path $VersionFolder -ChildPath "LoopbackAdapter.psd1"
-      (Get-Content $manifest -Raw).Replace("1.0.0.0", $env:APPVEYOR_BUILD_VERSION) | Out-File $manifest
-      
       # Create zip artifact
-      $zipFilePath = Join-Path -Path $buildFolder -ChildPath "${env:APPVEYOR_PROJECT_NAME}_${env:APPVEYOR_BUILD_VERSION}.zip"
+      $zipFilePath = Join-Path -Path $buildFolder -ChildPath "${ENV:APPVEYOR_PROJECT_NAME}_${ENV:APPVEYOR_BUILD_VERSION}.zip"
       $null = Add-Type -assemblyname System.IO.Compression.FileSystem
       [System.IO.Compression.ZipFile]::CreateFromDirectory($StagingFolder, $zipFilePath)
-                  
+
       # Create Publish Script Artifact
-      $PublishScriptName = $env:APPVEYOR_PROJECT_NAME + "." + $env:APPVEYOR_BUILD_VERSION + "_publish.ps1"
+      $PublishScriptName = $ENV:APPVEYOR_PROJECT_NAME + "." + $ENV:APPVEYOR_BUILD_VERSION + "_publish.ps1"
       $PublishScriptPath = Join-Path -Path $buildFolder -ChildPath $PublishScriptName
-      Set-Content -Path $PublishScriptPath -Value "Publish-Module -Name 'LoopbackAdapter' -RequiredVersion ${env:APPVEYOR_BUILD_VERSION} -NuGetApiKey (Read-Host -Prompt 'NuGetApiKey')"
+      Set-Content -Path $PublishScriptPath -Value "Publish-Module -Name {$ENV:APPVEYOR_PROJECT_NAME} -RequiredVersion ${ENV:APPVEYOR_BUILD_VERSION} -NuGetApiKey (Read-Host -Prompt 'NuGetApiKey')"
       
       @(
           # You can add other artifacts here
@@ -79,7 +96,7 @@ deploy_script:
         Write-Host "Publishing Module to PowerShell Gallery"
         Copy-Item -Path $ModuleFolder -Destination ($ENV:PSModulePath -split ';')[0] -Recurse
         Get-PackageProvider -Name NuGet -ForceBootstrap
-        Publish-Module -Name 'LoopbackAdapter' -RequiredVersion ${env:APPVEYOR_BUILD_VERSION} -NuGetApiKey $ENV:PowerShellGalleryApiKey -Confirm:$false
+        Publish-Module -Name $ENV:APPVEYOR_PROJECT_NAME -RequiredVersion ${env:APPVEYOR_BUILD_VERSION} -NuGetApiKey $ENV:PowerShellGalleryApiKey -Confirm:$false
       }
       
       # Remove Staging Folder
