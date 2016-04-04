@@ -38,12 +38,12 @@ function New-LoopbackAdapter
     $Adapter = Get-NetAdapter `
         -Name $Name `
         -ErrorAction SilentlyContinue
-    
+
     # Is the loopback adapter installed?
     if ($Adapter)
     {
         Throw "A Network Adapter $Name is already installed."
-    }
+    } # if
 
     # Make sure DevCon is installed.
     $DevConExe = (Install-Devcon @PSBoundParameters).Name
@@ -51,7 +51,7 @@ function New-LoopbackAdapter
     # Get a list of existing Loopback adapters
     # This will be used to figure out which adapter was just added
     $ExistingAdapters = (Get-LoopbackAdapter).PnPDeviceID
-    
+
     # Use Devcon.exe to install the Microsoft Loopback adapter
     # Requires local Admin privs.
     $null = & $DevConExe @('install',"$($ENV:SystemRoot)\inf\netloop.inf",'*MSLOOP')
@@ -62,24 +62,59 @@ function New-LoopbackAdapter
             ($_.PnPDeviceID -notin $ExistingAdapters ) -and `
             ($_.DriverDescription -eq 'Microsoft KM-TEST Loopback Adapter')
         }
-    if (! $Adapter)
+    if (-not $Adapter)
     {
         Throw "The new Loopback Adapter was not found."
-    } 
+    } # if
+
     # Rename the new Loopback adapter
-    $Adapter | Rename-NetAdapter -NewName $Name
+    $Adapter | Rename-NetAdapter `
+        -NewName $Name `
+        -ErrorAction Stop
 
     # Set the metric to 254
     Set-NetIPInterface `
         -InterfaceAlias $Name `
-        -InterfaceMetric 254
-    
+        -InterfaceMetric 254 `
+        -ErrorAction Stop
+
+    # Wait till IP address binding has registered in the CIM subsystem.
+    # if after 30 seconds it has not been registered then throw an exception.
+    [Boolean] $AdapterBindingReady = $false
+    [DateTime] $StartTime = Get-Date
+    while (-not $AdapterBindingReady `
+        -and (((Get-Date) - $StartTime).TotalSeconds) -lt 30)
+    {
+        try
+        {
+            $IPAddress = Get-CimInstance `
+                -ClassName MSFT_NetIPAddress `
+                -Namespace ROOT/StandardCimv2 `
+                -Filter "((InterfaceAlias = '$Name') AND (AddressFamily = 2))" `
+                -ErrorAction Stop
+            if ($IPAddress)
+            {
+                $AdapterBindingReady = $true
+            } # if
+            Start-Sleep -Seconds 1
+        }
+        catch
+        {
+        }
+    } # while
+
+    if (-not $IPAddress)
+    {
+        Throw "The New Loopback Adapter was not found in the CIM subsystem."
+    }
+
     # Pull the newly named adapter (to be safe)
     $Adapter = Get-NetAdapter `
-        -Name $Name
+        -Name $Name `
+        -ErrorAction Stop
 
     Return $Adapter
-}
+} # function New-LoopbackAdapter
 
 
 <#
@@ -89,7 +124,7 @@ function New-LoopbackAdapter
    This function will return either the Loopback Adapter specified in the $Name parameter
    or all Loopback Adapters. It will only return adapters that use the Microsoft KM-TEST Loopback Adapter
    driver.
-   
+
    This function does not use Chocolatey or the DevCon (Device Console) application, so does not
    require administrator access.
 .PARAMETER Name
@@ -123,14 +158,14 @@ function Get-LoopbackAdapter
         if ($Adapter.DriverDescription -ne 'Microsoft KM-TEST Loopback Adapter')
         {
             Throw "The Network Adapter $Name exists but it is not a Microsoft KM-TEST Loopback Adapter."
-        }
+        } # if
         return $Adapter
     }
     else
     {
         Get-NetAdapter | Where-Object -Property DriverDescription -eq 'Microsoft KM-TEST Loopback Adapter'
-    }    
-}
+    } # if
+} # function Get-LoopbackAdapter
 
 
 <#
@@ -163,7 +198,7 @@ function Remove-LoopbackAdapter
         $Name,
         
         [switch]
-        $Force          
+        $Force
     )
     $null = $PSBoundParameters.Remove('Name')
 
@@ -171,7 +206,7 @@ function Remove-LoopbackAdapter
     $Adapter = Get-NetAdapter `
         -Name $Name `
         -ErrorAction SilentlyContinue
-    
+
     # Is the loopback adapter installed?
     if (! $Adapter)
     {
@@ -184,7 +219,7 @@ function Remove-LoopbackAdapter
     {
         # Not a loopback adapter - don't uninstall this!
         Throw "Network Adapter $Name is not a Microsoft KM-TEST Loopback Adapter."
-    }
+    } # if
 
     # Make sure DevCon is installed.
     $DevConExe = (Install-Devcon @PSBoundParameters).Name
@@ -192,7 +227,7 @@ function Remove-LoopbackAdapter
     # Use Devcon.exe to remove the Microsoft Loopback adapter using the PnPDeviceID.
     # Requires local Admin privs.
     $null = & $DevConExe @('remove',"@$($Adapter.PnPDeviceID)")
-}
+} # function Remove-LoopbackAdapter
 
 
 # Support functions - not exposed
