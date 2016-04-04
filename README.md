@@ -15,8 +15,8 @@ It uses [Chocolatey](https://chocolatey.org/) to download an package called [dev
 Requirements
 ------------
 Using this module requires:
-1. **Local Admin** - this module should be run in an Administrative PowerShell session so that it can install/uninstall hardware devices.
-2. **Internet Access* - this module will download Chocolatey from https://chocolatey.org and then use that to install the devcon.portable package.
+ 1. **Local Admin** - this module should be run in an Administrative PowerShell session so that it can install/uninstall hardware devices.
+ 2. **Internet Access* - this module will download Chocolatey from https://chocolatey.org and then use that to install the devcon.portable package.
 
 
 Installation
@@ -130,6 +130,10 @@ LoopbackAdapter
 
 Versions
 --------
+### 1.1.0.0
+* New-LoopbackAdapter: Added delay to ensure New adapter is available to CIM.
+                       Exception now causes function to stop correctly.
+
 ### 1.0.0.0
 * Initial Release.
 
