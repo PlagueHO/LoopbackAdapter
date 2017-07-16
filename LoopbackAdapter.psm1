@@ -8,7 +8,7 @@
 .PARAMETER Name
    The name of the Loopback Adapter to create.
 .PARAMETER Force
-   Force the install of Chocolatey and the Devcon.portable pacakge if not already installed, without confirming with the user.
+   Force the install of Chocolatey and the Devcon.portable package if not already installed, without confirming with the user.
 .EXAMPLE
     $Adapter = New-LoopbackAdapter -Name 'MyNewLoopback'
    Creates a new Loopback Adapter called MyNewLoopback.
@@ -177,7 +177,7 @@ function Get-LoopbackAdapter
 .PARAMETER Name
    The name of the Loopback Adapter to uninstall.
 .PARAMETER Force
-   Force the install of Chocolatey and the Devcon.portable pacakge if not already installed, without confirming with the user.
+   Force the install of Chocolatey and the Devcon.portable package if not already installed, without confirming with the user.
 .EXAMPLE
     Remove-LoopbackAdapter -Name 'MyNewLoopback'
    Removes an existing Loopback Adapter called MyNewLoopback.
@@ -234,7 +234,7 @@ function Remove-LoopbackAdapter
 
 <#
 .SYNOPSIS
-   Install the DevCon.Portable (Windows Device Console) pacakge using Chocolatey.
+   Install the DevCon.Portable (Windows Device Console) package using Chocolatey.
 .DESCRIPTION
    Installs Chocolatey from the internet if it is not installed, then uses
    it to download the DevCon.Portable (Windows Device Console) package.
@@ -244,7 +244,7 @@ function Remove-LoopbackAdapter
    
    Chocolatey will remain installed after this function is called.   
 .PARAMETER Force
-   Force the install of Chocolatey and the Devcon.portable pacakge if not already installed, without confirming with the user.
+   Force the install of Chocolatey and the Devcon.portable package if not already installed, without confirming with the user.
 .EXAMPLE
     Install-Devcon
 .OUTPUTS
@@ -288,7 +288,7 @@ function Install-Devcon
             Throw 'An error occured installing DevCon (Windows Device Console) using Chocolatey.'
         }
     }
-    
+
     if ([Environment]::Is64BitOperatingSystem -eq $True)
     {
         Get-ChildItem "$ENV:ProgramData\Chocolatey\Lib\devcon.portable\Devcon64.exe"    
@@ -302,14 +302,14 @@ function Install-Devcon
 
 <#
 .SYNOPSIS
-   Install the DevCon.Portable (Windows Device Console) pacakge using Chocolatey.
+   Install the DevCon.Portable (Windows Device Console) package using Chocolatey.
 .DESCRIPTION
    Installs Chocolatey from the internet if it is not installed, then uses
    it to uninstall the DevCon.Portable (Windows Device Console) package.
    
    Chocolatey will remain installed after this function is called.
 .PARAMETER Force
-   Force the uninstall of the devcon.portable pacakge if it is installed, without confirming with the user.
+   Force the uninstall of the devcon.portable package if it is installed, without confirming with the user.
 .EXAMPLE
     Uninstall-Devcon
 .OUTPUTS
