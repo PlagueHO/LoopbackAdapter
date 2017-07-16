@@ -288,7 +288,7 @@ function Install-Devcon
             Throw 'An error occured installing DevCon (Windows Device Console) using Chocolatey.'
         }
     }
-    if ($ENV:PROCESSOR_ARCHITECTURE -like '*64')
+    if ([Environment]::Is64BitOperatingSystem -eq $True)
     {
         Get-ChildItem "$ENV:ProgramData\Chocolatey\Lib\devcon.portable\Devcon64.exe"    
     }
