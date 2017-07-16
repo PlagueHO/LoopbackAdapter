@@ -31,7 +31,7 @@ Using this module requires:
 | Installation if WMF5.0 is Installed:
 
 ```PowerShell
-Install-Module -Name LoopbackAdapter -MinimumVersion 1.0.0.0
+Install-Module -Name LoopbackAdapter -MinimumVersion 1.2.0.0
 ```
 
 | Installation if WMF5.0 is Not Installed
