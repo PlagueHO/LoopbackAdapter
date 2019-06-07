@@ -168,6 +168,10 @@ LoopbackAdapter
 
 ## Versions
 
+### 1.2.1.0
+
+* Using FullName to prevent issues with the path environment variable
+
 ### 1.2.0.0
 
 * Cleanup README.MD markdown.
