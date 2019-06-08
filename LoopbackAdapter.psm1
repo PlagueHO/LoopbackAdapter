@@ -2,7 +2,7 @@
 .SYNOPSIS
    Install a new Loopback Network Adapter.
 .DESCRIPTION
-   Uses Chocolatey to download the DevCon (Windows Device Console) package and 
+   Uses Chocolatey to download the DevCon (Windows Device Console) package and
    uses it to install a new Loopback Network Adapter with the name specified.
    The Loopback Adapter will need to be configured like any other adapter (e.g. configure IP and DNS)
 .PARAMETER Name
@@ -28,7 +28,7 @@ function New-LoopbackAdapter
             Position=0)]
         [string]
         $Name,
-        
+
         [switch]
         $Force
     )
@@ -46,7 +46,7 @@ function New-LoopbackAdapter
     } # if
 
     # Make sure DevCon is installed.
-    $DevConExe = (Install-Devcon @PSBoundParameters).Name
+    $DevConExe = (Install-Devcon @PSBoundParameters).FullName
 
     # Get a list of existing Loopback adapters
     # This will be used to figure out which adapter was just added
@@ -172,7 +172,7 @@ function Get-LoopbackAdapter
 .SYNOPSIS
    Uninstall an existing Loopback Network Adapter.
 .DESCRIPTION
-   Uses Chocolatey to download the DevCon (Windows Device Console) package and 
+   Uses Chocolatey to download the DevCon (Windows Device Console) package and
    uses it to uninstall a new Loopback Network Adapter with the name specified.
 .PARAMETER Name
    The name of the Loopback Adapter to uninstall.
@@ -196,7 +196,7 @@ function Remove-LoopbackAdapter
             Position=0)]
         [string]
         $Name,
-        
+
         [switch]
         $Force
     )
@@ -222,7 +222,7 @@ function Remove-LoopbackAdapter
     } # if
 
     # Make sure DevCon is installed.
-    $DevConExe = (Install-Devcon @PSBoundParameters).Name
+    $DevConExe = (Install-Devcon @PSBoundParameters).FullName
 
     # Use Devcon.exe to remove the Microsoft Loopback adapter using the PnPDeviceID.
     # Requires local Admin privs.
@@ -241,8 +241,8 @@ function Remove-LoopbackAdapter
    The devcon.portable Chocolatey package can be found here and installed manually
    if no internet connection is available:
    https://chocolatey.org/packages/devcon.portable/
-   
-   Chocolatey will remain installed after this function is called.   
+
+   Chocolatey will remain installed after this function is called.
 .PARAMETER Force
    Force the install of Chocolatey and the Devcon.portable package if not already installed, without confirming with the user.
 .EXAMPLE
@@ -273,7 +273,7 @@ function Install-Devcon
         try
         {
             # This will download and install DevCon.exe
-            # It will also be automatically placed into the path 
+            # It will also be automatically placed into the path
             If ($Force -or $PSCmdlet.ShouldProcess('Download and install DevCon (Windows Device Console) using Chocolatey'))
             {
                 $null = & choco install -r -y devcon.portable
@@ -291,11 +291,11 @@ function Install-Devcon
 
     if ([Environment]::Is64BitOperatingSystem -eq $True)
     {
-        Get-ChildItem "$ENV:ProgramData\Chocolatey\Lib\devcon.portable\Devcon64.exe"    
+        Get-ChildItem "$ENV:ProgramData\Chocolatey\Lib\devcon.portable\Devcon64.exe"
     }
     else
     {
-        Get-ChildItem "$ENV:ProgramData\Chocolatey\Lib\devcon.portable\Devcon32.exe"    
+        Get-ChildItem "$ENV:ProgramData\Chocolatey\Lib\devcon.portable\Devcon32.exe"
     }
 }
 
@@ -306,7 +306,7 @@ function Install-Devcon
 .DESCRIPTION
    Installs Chocolatey from the internet if it is not installed, then uses
    it to uninstall the DevCon.Portable (Windows Device Console) package.
-   
+
    Chocolatey will remain installed after this function is called.
 .PARAMETER Force
    Force the uninstall of the devcon.portable package if it is installed, without confirming with the user.
@@ -328,18 +328,18 @@ function Uninstall-Devcon
         $Force
     )
     Install-Chocolatey @PSBoundParameters
-    
+
     try
     {
         # This will download and install DevCon.exe
-        # It will also be automatically placed into the path 
+        # It will also be automatically placed into the path
         if ($Force -or $PSCmdlet.ShouldProcess('Uninstall DevCon (Windows Device Console) using Chocolatey'))
         {
             $null = & choco uninstall -r -y devcon.portable
         }
         else
         {
-            Throw 'DevCon (Windows Device Console) was not uninstalled because user declined.'    
+            Throw 'DevCon (Windows Device Console) was not uninstalled because user declined.'
         }
     }
     catch
@@ -353,7 +353,7 @@ function Uninstall-Devcon
 .SYNOPSIS
    Install Chocolatey.
 .DESCRIPTION
-   Installs Chocolatey from the internet if it is not installed.d.   
+   Installs Chocolatey from the internet if it is not installed.d.
 .PARAMETER Force
    Force the install of Chocolatey, without confirming with the user.
 .EXAMPLE
@@ -379,7 +379,7 @@ function Install-Chocolatey
     {
         If ($Force -or $PSCmdlet.ShouldProcess('Download and install Chocolatey'))
         {
-            $null = Invoke-Expression ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))    
+            $null = Invoke-Expression ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))
         }
         else
         {
