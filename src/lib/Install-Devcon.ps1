@@ -51,7 +51,8 @@ function Install-Devcon
             #>
             if ($Force -or $PSCmdlet.ShouldProcess($LocalizedData.DownloadAndInstallDevConShould))
             {
-                $null = & choco install -r -y devcon.portable
+                Write-Verbose -Message $LocalizedData.InstallDevconMessage
+                $null = & choco @('install','-r','-y','devcon.portable')
             }
             else
             {

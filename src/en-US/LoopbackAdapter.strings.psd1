@@ -3,6 +3,7 @@ ConvertFrom-StringData -StringData @'
     NetworkAdapterExistsWrongTypeError = The Network Adapter '{0}' exists but it is not a Microsoft KM-TEST Loopback Adapter.
     DownloadAndInstallChocolateyShould = Download and install Chocolatey
     ChocolateyNotInstalledError = Chocolatey could not be installed because user declined installation.
+    ChocolateyInstallationError = An error occurred installing Chocolatey: {0}
     DownloadAndInstallDevConShould = Download and install DevCon (Windows Device Console) using Chocolatey
     DevConNotInstalledError = DevCon (Windows Device Console) was not installed because user declined.
     DevConInstallationError = An error occured installing DevCon (Windows Device Console) using Chocolatey: {0}
@@ -15,4 +16,7 @@ ConvertFrom-StringData -StringData @'
     UninstallDevConShould = Uninstall DevCon (Windows Device Console) using Chocolatey
     DevConNotUninstalledError = DevCon (Windows Device Console) was not uninstalled because user declined.
     DevConNotUninstallationError = An error occured uninstalling DevCon (Windows Device Console) using Chocolatey: {0}
+    InstallingChocolateyMessage = Installing Chocolatey.
+    ChocolateyInstalledMessage = Chocolatey is already installed. Installation skipped.
+    InstallDevconMessage = Installing Devcon.
 '@

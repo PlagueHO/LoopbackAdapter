@@ -49,7 +49,7 @@ InModuleScope LoopbackAdapter {
             Mock -CommandName Get-NetAdapter
 
             It 'Should return null' {
-                Get-LoopbackAdapter | Should -BeNullOrEmpty
+                Get-LoopbackAdapter -Verbose | Should -BeNullOrEmpty
             }
         }
 
@@ -57,15 +57,15 @@ InModuleScope LoopbackAdapter {
             Mock -CommandName Get-NetAdapter -MockWith @script:adaptersWithNoLoopbackAdapter
 
             It 'Should return null' {
-                Get-LoopbackAdapter | Should -BeNullOrEmpty
+                Get-LoopbackAdapter -Verbose | Should -BeNullOrEmpty
             }
         }
 
         Context 'When called with no adapter name and one Loopback Adapter exists' {
             Mock -CommandName Get-NetAdapter -MockWith @script:adaptersWithOneLoopbackAdapter
 
-            It 'Should return null' {
-                $adapters = Get-LoopbackAdapter
+            It 'Should return expected loopback adapter' {
+                $adapters = Get-LoopbackAdapter -Verbose
                 $adapters | Should -HaveCount 1
                 $adapters.Name | Should -BeExactly 'LoopbackAdapter'
                 $adapters.DriverDescription | Should -BeExactly 'Microsoft KM-TEST Loopback Adapter'
@@ -75,8 +75,8 @@ InModuleScope LoopbackAdapter {
         Context 'When called with no adapter name and two Loopback Adapter exists' {
             Mock -CommandName Get-NetAdapter -MockWith @script:adaptersWithTwoLoopbackAdapters
 
-            It 'Should return null' {
-                $adapters = Get-LoopbackAdapter
+            It 'Should return two expected loopback adpaters' {
+                $adapters = Get-LoopbackAdapter -Verbose
                 $adapters | Should -HaveCount 2
                 $adapters[0].Name | Should -BeExactly 'LoopbackAdapter1'
                 $adapters[0].DriverDescription | Should -BeExactly 'Microsoft KM-TEST Loopback Adapter'
@@ -90,7 +90,7 @@ InModuleScope LoopbackAdapter {
 
             It 'Should throw expected exception' {
                 {
-                    Get-LoopbackAdapter -Name 'LoopbackAdapter'
+                    Get-LoopbackAdapter -Name 'LoopbackAdapter' -Verbose
                 } | Should -Throw 'No Adapter'
             }
         }
@@ -98,8 +98,8 @@ InModuleScope LoopbackAdapter {
         Context 'When called with an adapter name and the adapter does exist and is a loopback adapter' {
             Mock -CommandName Get-NetAdapter -MockWith @script:adaptersWithOneLoopbackAdapter
 
-            It 'Should return null' {
-                $adapters = Get-LoopbackAdapter -Name 'LoopbackAdapter'
+            It 'Should return expected loopback adapter' {
+                $adapters = Get-LoopbackAdapter -Name 'LoopbackAdapter' -Verbose
                 $adapters | Should -HaveCount 1
                 $adapters.Name | Should -BeExactly 'LoopbackAdapter'
                 $adapters.DriverDescription | Should -BeExactly 'Microsoft KM-TEST Loopback Adapter'
@@ -111,7 +111,7 @@ InModuleScope LoopbackAdapter {
 
             It 'Should throw expected exception' {
                 {
-                    Get-LoopbackAdapter -Name 'LoopbackAdapter'
+                    Get-LoopbackAdapter -Name 'LoopbackAdapter' -Verbose
                 } | Should -Throw ($LocalizedData.NetworkAdapterExistsWrongTypeError -f 'LoopbackAdapter')
             }
         }
@@ -121,11 +121,146 @@ InModuleScope LoopbackAdapter {
         It 'Should exist' {
             { Get-Command -Name Install-Chocolatey -ErrorAction Stop } | Should -Not -Throw
         }
+
+        Context 'When Chocolatey is already installed' {
+            Mock -CommandName Test-Path -MockWith { $true }
+
+            It 'Should not throw exception' {
+                {
+                    Install-Chocolatey -Force -Verbose
+                } | Should -Not -Throw
+            }
+        }
+
+        Context 'When Chocolatey is not installed and installs correctly' {
+            Mock -CommandName Test-Path -MockWith { $false }
+            Mock -CommandName Invoke-WebRequest -MockWith {
+                @{ Content = '$result = "Complete"' }
+            }
+
+            It 'Should not throw exception' {
+                {
+                    Install-Chocolatey -Force -Verbose
+                } | Should -Not -Throw
+            }
+        }
+
+        Context 'When Chocolatey is not installed and an error occurs installing' {
+            Mock -CommandName Test-Path -MockWith { $false }
+            Mock -CommandName Invoke-WebRequest -MockWith {
+                throw 'Error'
+            }
+
+            It 'Should throw expected exception' {
+                {
+                    Install-Chocolatey -Force -Verbose
+                } | Should -Throw ($LocalizedData.ChocolateyInstallationError -f 'Error')
+            }
+        }
     }
 
     Describe 'Install-Devcon' -Tag 'Unit' {
+        BeforeAll {
+            Mock -CommandName Install-Chocolatey
+            Mock -CommandName Get-Childitem `
+                -ParameterFilter { $Path -eq "$ENV:ProgramData\Chocolatey\Lib\devcon.portable\Devcon32.exe" } `
+                -MockWith {
+                    @{
+                        Fullname = "$ENV:ProgramData\Chocolatey\Lib\devcon.portable\Devcon32.exe"
+                    }
+                }
+            Mock -CommandName Get-Childitem `
+                -ParameterFilter { $Path -eq "$ENV:ProgramData\Chocolatey\Lib\devcon.portable\Devcon64.exe" } `
+                -MockWith {
+                    @{
+                        Fullname = "$ENV:ProgramData\Chocolatey\Lib\devcon.portable\Devcon64.exe"
+                    }
+                }
+        }
+
         It 'Should exist' {
             { Get-Command -Name Install-Devcon -ErrorAction Stop } | Should -Not -Throw
+        }
+
+        Context 'When DevCon32 and Devcon64 is installed' {
+            Mock -CommandName Get-Childitem `
+                -ParameterFilter { $Path -eq "$ENV:ProgramData\Chocolatey\Lib\devcon.portable\Devcon32.exe" } `
+                -MockWith {
+                    @{
+                        Fullname = "$ENV:ProgramData\Chocolatey\Lib\devcon.portable\Devcon32.exe"
+                    }
+                }
+            Mock -CommandName Get-Childitem `
+                -ParameterFilter { $Path -eq "$ENV:ProgramData\Chocolatey\Lib\devcon.portable\Devcon64.exe" } `
+                -MockWith {
+                    @{
+                        Fullname = "$ENV:ProgramData\Chocolatey\Lib\devcon.portable\Devcon64.exe"
+                    }
+                }
+
+            It 'Should return path to Devcon' {
+                {
+                    $path = Install-Devcon -Force -Verbose
+
+                    if ([Environment]::Is64BitOperatingSystem)
+                    {
+                        $path.Fullname | Should -Be "$ENV:ProgramData\Chocolatey\Lib\devcon.portable\Devcon64.exe"
+                    }
+                    else
+                    {
+                        $path.Fullname | Should -Be "$ENV:ProgramData\Chocolatey\Lib\devcon.portable\Devcon32.exe"
+                    }
+                } | Should -Not -Throw
+            }
+        }
+
+        Context 'When DevCon32 and Devcon64 is not installed' {
+            Mock -CommandName Test-Path `
+                -ParameterFilter { $Path -eq "$ENV:ProgramData\Chocolatey\Lib\devcon.portable\Devcon32.exe" } `
+                -MockWith { $false }
+            Mock -CommandName Test-Path `
+                -ParameterFilter { $Path -eq "$ENV:ProgramData\Chocolatey\Lib\devcon.portable\Devcon64.exe" } `
+                -MockWith { $false }
+            Mock -CommandName Choco
+
+            It 'Should return path to Devcon' {
+                {
+                    $path = Install-Devcon -Force -Verbose
+
+                    if ([Environment]::Is64BitOperatingSystem)
+                    {
+                        $path.Fullname | Should -Be "$ENV:ProgramData\Chocolatey\Lib\devcon.portable\Devcon64.exe"
+                    }
+                    else
+                    {
+                        $path.Fullname | Should -Be "$ENV:ProgramData\Chocolatey\Lib\devcon.portable\Devcon32.exe"
+                    }
+                } | Should -Not -Throw
+            }
+
+            It 'Should call choco' {
+                Assert-MockCalled -CommandName choco
+            }
+        }
+
+        Context 'When DevCon32 and Devcon64 is not installed and error occurs installing' {
+            Mock -CommandName Test-Path `
+                -ParameterFilter { $Path -eq "$ENV:ProgramData\Chocolatey\Lib\devcon.portable\Devcon32.exe" } `
+                -MockWith { $false }
+            Mock -CommandName Test-Path `
+                -ParameterFilter { $Path -eq "$ENV:ProgramData\Chocolatey\Lib\devcon.portable\Devcon64.exe" } `
+                -MockWith { $false }
+            Mock -CommandName Choco -MockWith { throw 'Choco Error' }
+
+            It 'Should return path to Devcon' {
+                {
+                    Install-Devcon -Force -Verbose
+                } | Should -Throw ($LocalizedData.DevConInstallationError -f 'Choco Error')
+            }
+
+            It 'Should call choco' {
+                Assert-MockCalled -CommandName choco
+            }
         }
     }
 

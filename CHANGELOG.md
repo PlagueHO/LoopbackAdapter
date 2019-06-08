@@ -4,6 +4,8 @@
 
 - Using FullName to prevent issues with the path environment variable.
 - Improved repository structure.
+- Added unit tests and integration tests.
+- Added CI process for AppVeyor and Azure Pipelines.
 
 ## 1.2.0.0
 

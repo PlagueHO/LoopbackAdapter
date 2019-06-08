@@ -33,13 +33,25 @@ function Install-Chocolatey
     {
         if ($Force -or $PSCmdlet.ShouldProcess($LocalizedData.DownloadAndInstallChocolateyShould))
         {
-            $chocolateyInstallScript = (Invoke-WebRequest -UseBasicParsing -Uri 'https://chocolatey.org/install.ps1').Content
-            $chocolateyInstallScript = [scriptblock]::Create($chocolateyInstallScript)
-            $null = $chocolateyInstallScript.Invoke()
+            Write-Verbose -Message $LocalizedData.InstallingChocolateyMessage
+            try
+            {
+                $chocolateyInstallScript = (Invoke-WebRequest -UseBasicParsing -Uri 'https://chocolatey.org/install.ps1').Content
+                $chocolateyInstallScript = [scriptblock]::Create($chocolateyInstallScript)
+                $null = $chocolateyInstallScript.Invoke()
+            }
+            catch
+            {
+                throw ($LocalizedData.ChocolateyInstallationError -f $_)
+            }
         }
         else
         {
             throw $LocalizedData.NetworkAdapterExistsWrongTypeError
         }
+    }
+    else
+    {
+        Write-Verbose -Message $LocalizedData.ChocolateyInstalledMessage
     }
 }
