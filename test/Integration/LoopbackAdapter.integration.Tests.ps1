@@ -16,7 +16,7 @@ Describe 'LoopbackAdapter Module' -Tag 'Integration' {
 
     Context 'When installing a Loopback Adapter' {
         It 'Should not throw an exception' {
-            New-LoopbackAdapter -Name $script:testAdapterName -Verbose
+            New-LoopbackAdapter -Name $script:testAdapterName -Force -Verbose
         }
     }
 
@@ -33,7 +33,7 @@ Describe 'LoopbackAdapter Module' -Tag 'Integration' {
 
     Context 'When removing a Loopback Adapter' {
         It 'Should not throw an exception' {
-            Remove-LoopbackAdapter -Name $script:testAdapterName -Verbose
+            Remove-LoopbackAdapter -Name $script:testAdapterName -Force -Verbose
         }
 
         It 'Should have removed the loopback adapter' {
