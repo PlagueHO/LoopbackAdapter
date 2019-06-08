@@ -18,7 +18,7 @@ function Get-LoopbackAdapter
 
         if ($adapter.DriverDescription -ne 'Microsoft KM-TEST Loopback Adapter')
         {
-            Throw ($LocalizedData.NetworkAdapterExistsWrongTypeError -f $Name)
+            throw ($LocalizedData.NetworkAdapterExistsWrongTypeError -f $Name)
         } # if
 
         return $adapter

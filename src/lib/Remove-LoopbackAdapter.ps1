@@ -23,14 +23,14 @@ function Remove-LoopbackAdapter
     if (-not $adapter)
     {
         # Adapter doesn't exist
-        Throw ($LocalizedData.LoopbackAdapterNotFound -f $Name)
+        throw ($LocalizedData.LoopbackAdapterNotFound -f $Name)
     }
 
     # Is the adapter Loopback adapter?
     if ($adapter.DriverDescription -ne 'Microsoft KM-TEST Loopback Adapter')
     {
         # Not a loopback adapter - don't uninstall this!
-        Throw ($LocalizedData.NetworkAdapterWrongTypeError -f $Name)
+        throw ($LocalizedData.NetworkAdapterWrongTypeError -f $Name)
     } # if
 
     # Make sure DevCon is installed.

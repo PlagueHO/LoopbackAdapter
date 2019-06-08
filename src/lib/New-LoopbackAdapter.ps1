@@ -92,13 +92,13 @@ function New-LoopbackAdapter
         }
         catch
         {
-            Write-Verbose -Message $_
+            Write-Warning -Message ($LocalizedData.GetIPAddressWarning -f $_)
         }
     } # while
 
     if (-not $ipAddress)
     {
-        Throw $LocalizedData.NewNetworkAdapterNotFoundInCIMError
+        throw $LocalizedData.NewNetworkAdapterNotFoundInCIMError
     }
 
     # Pull the newly named adapter (to be safe)

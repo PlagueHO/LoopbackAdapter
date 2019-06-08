@@ -43,11 +43,11 @@ function Uninstall-Devcon
         }
         else
         {
-            Throw $LocalizedData.DevConNotUninstalledError
+            throw $LocalizedData.DevConNotUninstalledError
         }
     }
     catch
     {
-        Throw $LocalizedData.DevConNotUninstallationError
+        throw ($LocalizedData.DevConNotUninstallationError -f $_)
     }
 }

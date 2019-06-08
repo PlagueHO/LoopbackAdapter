@@ -55,12 +55,12 @@ function Install-Devcon
             }
             else
             {
-                Throw $LocalizedData.DevConNotInstalledError
+                throw $LocalizedData.DevConNotInstalledError
             }
         }
         catch
         {
-            Throw $LocalizedData.DevConInstallationError
+            throw ($LocalizedData.DevConInstallationError -f $_)
         }
     }
 
