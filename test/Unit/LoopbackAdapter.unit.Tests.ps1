@@ -85,23 +85,17 @@ InModuleScope LoopbackAdapter {
             }
         }
 
-        Context 'When called with an adapter name and no adapters exist' {
-            Mock -CommandName Get-NetAdapter
+        Context 'When called with an adapter name and the adapter does not exist' {
+            Mock -CommandName Get-NetAdapter -MockWith { throw 'No Adapter' }
 
-            It 'Should return null' {
-                Get-LoopbackAdapter -Name 'LoopbackAdapter' | Should -BeNullOrEmpty
+            It 'Should throw expected exception' {
+                {
+                    Get-LoopbackAdapter -Name 'LoopbackAdapter'
+                } | Should -Throw 'No Adapter'
             }
         }
 
-        Context 'When called with an adapter name and no Loopback Adapters exist' {
-            Mock -CommandName Get-NetAdapter -MockWith @script:adaptersWithNoLoopbackAdapter
-
-            It 'Should return null' {
-                Get-LoopbackAdapter -Name 'LoopbackAdapter' | Should -BeNullOrEmpty
-            }
-        }
-
-        Context 'When called with an adapter name and one matching Loopback Adapter exists' {
+        Context 'When called with an adapter name and the adapter does exist and is a loopback adapter' {
             Mock -CommandName Get-NetAdapter -MockWith @script:adaptersWithOneLoopbackAdapter
 
             It 'Should return null' {
@@ -112,26 +106,15 @@ InModuleScope LoopbackAdapter {
             }
         }
 
-        Context 'When called with an adapter name and two Loopback Adapter exists but none match' {
-            Mock -CommandName Get-NetAdapter -MockWith @script:adaptersWithTwoLoopbackAdapters
+        Context 'When called with an adapter name and the adapter does exist and is not a loopback adapter' {
+            Mock -CommandName Get-NetAdapter -MockWith @script:adaptersWithNoLoopbackAdapter
 
-            It 'Should return null' {
-                $adapters = Get-LoopbackAdapter -Name 'LoopbackAdapterNoMatch'
-                $adapters | Should -BeNullOrEmpty
+            It 'Should throw expected exception' {
+                {
+                    Get-LoopbackAdapter -Name 'LoopbackAdapter'
+                } | Should -Throw ($LocalizedData.NetworkAdapterExistsWrongTypeError -f 'LoopbackAdapter')
             }
         }
-
-        Context 'When called with an adapter name and two Loopback Adapter exists and one matches' {
-            Mock -CommandName Get-NetAdapter -MockWith @script:adaptersWithTwoLoopbackAdapters
-
-            It 'Should return null' {
-                $adapters = Get-LoopbackAdapter -Name 'LoopbackAdapter2'
-                $adapters | Should -HaveCount 1
-                $adapters.Name | Should -BeExactly 'LoopbackAdapter2'
-                $adapters.DriverDescription | Should -BeExactly 'Microsoft KM-TEST Loopback Adapter'
-            }
-        }
-
     }
 
     Describe 'Install-Chocolatey' -Tag 'Unit' {
