@@ -107,15 +107,15 @@ For a list of changes to versions, see the [CHANGELOG.md](CHANGELOG.md) file.
 - [GitHub Repository](https://github.com/PlagueHO/LoopbackAdapter/)
 - [Blog](https://dscottraynsford.wordpress.com/)
 
-[ap-image-dev]: https://dev.azure.com/dscottraynsford/GitHub/_apis/build/status/PlagueHO.CosmosDB?branchName=dev
-[ap-site-dev]: https://dev.azure.com/dscottraynsford/GitHub/_build/latest?definitionId=4
+[ap-image-dev]: https://dscottraynsford.visualstudio.com/GitHub/_apis/build/status/PlagueHO.LoopbackAdapter?branchName=dev
+[ap-site-dev]: https://dscottraynsford.visualstudio.com/GitHub/_build/latest?definitionId=12&branchName=dev
 [av-image-dev]: https://ci.appveyor.com/api/projects/status/qb67s7iw1jp7e32t/branch/dev?svg=true
 [av-site-dev]: https://ci.appveyor.com/project/PlagueHO/loopbackadapter/branch/dev
 [cc-image-dev]: https://codecov.io/gh/PlagueHO/LoopbackAdapter/branch/dev/graph/badge.svg
 [cc-site-dev]: https://codecov.io/gh/PlagueHO/LoopbackAdapter/branch/dev
 
-[ap-image-master]: https://dev.azure.com/dscottraynsford/GitHub/_apis/build/status/PlagueHO.CosmosDB?branchName=master
-[ap-site-master]: https://dev.azure.com/dscottraynsford/GitHub/_build/latest?definitionId=4
+[ap-image-master]: https://dscottraynsford.visualstudio.com/GitHub/_apis/build/status/PlagueHO.LoopbackAdapter?branchName=master
+[ap-site-master]: https://dscottraynsford.visualstudio.com/GitHub/_build/latest?definitionId=12&branchName=master
 [av-image-master]: https://ci.appveyor.com/api/projects/status/qb67s7iw1jp7e32t/branch/master?svg=true
 [av-site-master]: https://ci.appveyor.com/project/PlagueHO/loopbackadapter/branch/master
 [cc-image-master]: https://codecov.io/gh/PlagueHO/LoopbackAdapter/branch/master/graph/badge.svg
