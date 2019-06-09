@@ -7,16 +7,22 @@ Locale: en-US
 ---
 
 # LoopbackAdapter Module
+
 ## Description
-{{ Fill in the Description }}
+
+A PowerShell module for creating and removing Loopback Network Adapters on Windows
+using Device Console (DevCon.exe).
 
 ## LoopbackAdapter Cmdlets
+
 ### [Get-LoopbackAdapter](Get-LoopbackAdapter.md)
-{{ Fill in the Description }}
+
+Returns a specified Loopback Network Adapter or all Loopback Adapters.
 
 ### [New-LoopbackAdapter](New-LoopbackAdapter.md)
-{{ Fill in the Description }}
+
+Install a new Loopback Network Adapter.
 
 ### [Remove-LoopbackAdapter](Remove-LoopbackAdapter.md)
-{{ Fill in the Description }}
 
+Uninstall an existing Loopback Network Adapter.
