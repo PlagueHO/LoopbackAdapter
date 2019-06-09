@@ -19,4 +19,5 @@ ConvertFrom-StringData -StringData @'
     InstallingChocolateyMessage = Installing Chocolatey.
     ChocolateyInstalledMessage = Chocolatey is already installed. Installation skipped.
     InstallDevconMessage = Installing Devcon.
+    RemovingLoopbackAdapterMessage = Removing Loopback Adapter '{0}'.
 '@

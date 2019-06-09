@@ -33,12 +33,13 @@ function Remove-LoopbackAdapter
         throw ($LocalizedData.NetworkAdapterWrongTypeError -f $Name)
     } # if
 
-    # Make sure DevCon is installed.
+    # Make sure DevCon is installed and return path to executable
     $devConExe = (Install-Devcon @PSBoundParameters).FullName
 
     <#
         Use Devcon.exe to remove the Microsoft Loopback adapter using the PnPDeviceID.
         Requires local Admin privs.
     #>
+    Write-Verbose -Message ($LocalizedData.RemovingLoopbackAdapterMessage -f $Name)
     $null = & $devConExe @('remove',"@$($adapter.PnPDeviceID)")
 } # function Remove-LoopbackAdapter

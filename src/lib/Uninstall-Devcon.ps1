@@ -39,7 +39,7 @@ function Uninstall-Devcon
         #>
         if ($Force -or $PSCmdlet.ShouldProcess($LocalizedData.UninstallDevConShould))
         {
-            $null = & choco uninstall -r -y devcon.portable
+            $null = & choco @('uninstall','-r','-y','devcon.portable')
         }
         else
         {

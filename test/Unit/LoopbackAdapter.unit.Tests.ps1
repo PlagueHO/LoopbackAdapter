@@ -9,11 +9,20 @@ $ModuleManifestPath = "$PSScriptRoot\..\..\src\$ModuleManifestName"
 Import-Module -Name $ModuleManifestPath -Force -Verbose:$false
 
 InModuleScope LoopbackAdapter {
+    function devcon
+    {
+        param
+        (
+            $Args
+        )
+    }
+
     $script:adaptersWithNoLoopbackAdapter = {
         @(
             @{
                 Name = 'NormalAdapter'
                 DriverDescription = 'Not a Loopback Adapter'
+                PnPDeviceID = 'DeviceId'
             }
         )
     }
@@ -23,6 +32,7 @@ InModuleScope LoopbackAdapter {
             @{
                 Name = 'LoopbackAdapter'
                 DriverDescription = 'Microsoft KM-TEST Loopback Adapter'
+                PnPDeviceID = 'DeviceId'
             }
         )
     }
@@ -32,10 +42,12 @@ InModuleScope LoopbackAdapter {
             @{
                 Name = 'LoopbackAdapter1'
                 DriverDescription = 'Microsoft KM-TEST Loopback Adapter'
+                PnPDeviceID = 'DeviceId1'
             },
             @{
                 Name = 'LoopbackAdapter2'
                 DriverDescription = 'Microsoft KM-TEST Loopback Adapter'
+                PnPDeviceID = 'DeviceId2'
             }
         )
     }
@@ -274,11 +286,80 @@ InModuleScope LoopbackAdapter {
         It 'Should exist' {
             { Get-Command -Name Remove-LoopbackAdapter -ErrorAction Stop } | Should -Not -Throw
         }
+
+        Context 'When called with an adapter name and the adapter does not exist' {
+            Mock -CommandName Get-NetAdapter
+
+            It 'Should throw expected exception' {
+                {
+                    Remove-LoopbackAdapter -Name 'LoopbackAdapter' -Force -Verbose
+                } | Should -Throw ($LocalizedData.LoopbackAdapterNotFound -f 'LoopbackAdapter')
+            }
+        }
+
+        Context 'When called with an adapter name and the adapter does exist and is a loopback adapter' {
+            Mock -CommandName Get-NetAdapter -MockWith @script:adaptersWithOneLoopbackAdapter
+            Mock -CommandName Install-Devcon -MockWith {
+                @{
+                    FullName = 'devcon'
+                }
+            }
+            Mock -CommandName devcon
+
+            It 'Should not throw exception' {
+                {
+                    Remove-LoopbackAdapter -Name 'LoopbackAdapter' -Force -Verbose
+                } | Should -Not -Throw
+            }
+        }
+
+        Context 'When called with an adapter name and the adapter does exist but is not a loopback adapter' {
+            Mock -CommandName Get-NetAdapter -MockWith @script:adaptersWithNoLoopbackAdapter
+
+            It 'Should throw expected exception' {
+                {
+                    Remove-LoopbackAdapter -Name 'NormalAdapter' -Force -Verbose
+                } | Should -Throw ($LocalizedData.NetworkAdapterWrongTypeError -f 'NormalAdapter')
+            }
+        }
     }
 
     Describe 'Uninstall-Devcon' -Tag 'Unit' {
+        BeforeAll {
+            Mock -CommandName Install-Chocolatey
+            Mock -CommandName Choco
+        }
+
         It 'Should exist' {
             { Get-Command -Name Uninstall-Devcon -ErrorAction Stop } | Should -Not -Throw
+        }
+
+        Context 'When no exception occurs calling Chocolatey' {
+            Mock -CommandName Choco
+
+            It 'Should not throw exception' {
+                {
+                    Uninstall-Devcon -Force -Verbose
+                } | Should -Not -Throw
+            }
+
+            It 'Should call choco' {
+                Assert-MockCalled -CommandName Choco
+            }
+        }
+
+        Context 'When an exception occurs calling Chocolatey' {
+            Mock -CommandName Choco -MockWith { throw 'Choco Error' }
+
+            It 'Should throw expected exception' {
+                {
+                    Uninstall-Devcon -Force -Verbose
+                } | Should -Throw ($LocalizedData.DevConNotUninstallationError -f 'Choco Error')
+            }
+
+            It 'Should call choco' {
+                Assert-MockCalled -CommandName Choco
+            }
         }
     }
 }

@@ -290,6 +290,7 @@ Task Build -Depends Init {
     # Extract the PrivateData values and remove it because it can not be splatted
     'LicenseUri','Tags','ProjectUri','IconUri','ReleaseNotes' | Foreach-Object -Process {
         $privateDataValue = $stagedManifestContent.PrivateData.PSData.$_
+
         if ($privateDataValue)
         {
             $null = $stagedManifestContent.Add($_, $privateDataValue)
