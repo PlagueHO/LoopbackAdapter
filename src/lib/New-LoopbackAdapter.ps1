@@ -24,7 +24,7 @@ function New-LoopbackAdapter
     # Is the loopback adapter installed?
     if ($adapter)
     {
-        Throw ($localizedData.NetworkAdapterExistsError -f $Name)
+        throw ($localizedData.NetworkAdapterExistsError -f $Name)
     } # if
 
     # Make sure DevCon is installed.
@@ -40,6 +40,7 @@ function New-LoopbackAdapter
         Use Devcon.exe to install the Microsoft Loopback adapter
         Requires local Admin privs.
     #>
+    Write-Verbose -Message ($LocalizedData.CreatingLoopbackAdapterMessage -f $Name)
     $null = & $DevConExe @('install', "$($ENV:SystemRoot)\inf\netloop.inf", '*MSLOOP')
 
     # Find the newly added Loopback Adapter
@@ -51,16 +52,18 @@ function New-LoopbackAdapter
 
     if (-not $adapter)
     {
-        Throw $LocalizedData.NewNetworkAdapterNotFoundError
+        throw ($LocalizedData.NewNetworkAdapterNotFoundError -f $Name)
     } # if
 
     # Rename the new Loopback adapter
+    Write-Verbose -Message ($LocalizedData.SettingNameOfNewLoopbackAdapterMessage -f $Name)
     $adapter | Rename-NetAdapter `
         -NewName $Name `
         -ErrorAction Stop
 
     # Set the metric to 254
-    Set-NetIPInterface `
+    Write-Verbose -Message ($LocalizedData.SettingMetricOfNewLoopbackAdapterMessage -f $Name)
+    $null = Set-NetIPInterface `
         -InterfaceAlias $Name `
         -InterfaceMetric 254 `
         -ErrorAction Stop
@@ -88,6 +91,7 @@ function New-LoopbackAdapter
                 $adapterBindingReady = $true
             } # if
 
+            Write-Verbose -Message ($LocalizedData.WaitingForIPAddressMessage -f $Name)
             Start-Sleep -Seconds 1
         }
         catch

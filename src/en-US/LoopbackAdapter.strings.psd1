@@ -8,7 +8,7 @@ ConvertFrom-StringData -StringData @'
     DevConNotInstalledError = DevCon (Windows Device Console) was not installed because user declined.
     DevConInstallationError = An error occured installing DevCon (Windows Device Console) using Chocolatey: {0}
     NetworkAdapterExistsError = A Network Adapter '{0}' is already installed.
-    NewNetworkAdapterNotFoundError = The new Loopback Adapter was not found.
+    NewNetworkAdapterNotFoundError = The new Loopback Adapter '{0}' was not found.
     NewNetworkAdapterNotFoundInCIMError = The New Loopback Adapter was not found in the CIM subsystem.
     GetIPAddressWarning = An error occurred getting the IP Address for the new Loopback Adapter: {0}
     LoopbackAdapterNotFound = Loopback Adapter '{0}' is not found.
@@ -19,5 +19,9 @@ ConvertFrom-StringData -StringData @'
     InstallingChocolateyMessage = Installing Chocolatey.
     ChocolateyInstalledMessage = Chocolatey is already installed. Installation skipped.
     InstallDevconMessage = Installing Devcon.
+    CreatingLoopbackAdapterMessage = Creating Loopback Adapter '{0}'.
+    SettingNameOfNewLoopbackAdapterMessage = Setting the name of the new Loopback Adapter to '{0}'.
+    SettingMetricOfNewLoopbackAdapterMessage = Setting the metric of the new Loopback Adapter '{0}' to 254.
+    WaitingForIPAddressMessage = Waiting for IP address to be assigned to new Loopback Adapter '{0}'.
     RemovingLoopbackAdapterMessage = Removing Loopback Adapter '{0}'.
 '@

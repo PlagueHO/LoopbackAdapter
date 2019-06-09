@@ -22,7 +22,7 @@ InModuleScope LoopbackAdapter {
             @{
                 Name = 'NormalAdapter'
                 DriverDescription = 'Not a Loopback Adapter'
-                PnPDeviceID = 'DeviceId'
+                PnPDeviceID = 'NormalDeviceId'
             }
         )
     }
@@ -32,7 +32,7 @@ InModuleScope LoopbackAdapter {
             @{
                 Name = 'LoopbackAdapter'
                 DriverDescription = 'Microsoft KM-TEST Loopback Adapter'
-                PnPDeviceID = 'DeviceId'
+                PnPDeviceID = 'LoopbackDeviceId'
             }
         )
     }
@@ -42,12 +42,12 @@ InModuleScope LoopbackAdapter {
             @{
                 Name = 'LoopbackAdapter1'
                 DriverDescription = 'Microsoft KM-TEST Loopback Adapter'
-                PnPDeviceID = 'DeviceId1'
+                PnPDeviceID = 'LoopbackDeviceId1'
             },
             @{
                 Name = 'LoopbackAdapter2'
                 DriverDescription = 'Microsoft KM-TEST Loopback Adapter'
-                PnPDeviceID = 'DeviceId2'
+                PnPDeviceID = 'LoopbackDeviceId2'
             }
         )
     }
@@ -280,6 +280,84 @@ InModuleScope LoopbackAdapter {
         It 'Should exist' {
             { Get-Command -Name New-LoopbackAdapter -ErrorAction Stop } | Should -Not -Throw
         }
+
+        Context 'When the adapter does not exist and is created successfully and the IP address is assigned' {
+            $global:getNetAdapterCallCount = 0
+            Mock -CommandName Get-NetAdapter `
+                -ParameterFilter {
+                    $Name -eq 'LoopbackAdapter'
+                } `
+                -MockWith {
+                    $global:getNetAdapterCallCount++
+                }
+            Mock -CommandName Get-NetAdapter `
+                -ParameterFilter {
+                    $Name -eq 'LoopbackAdapter' -and `
+                    $global:getNetAdapterCallCount -ge 1
+                } `
+                -MockWith {
+                    $global:getNetAdapterCallCount++
+                    'NewLoopbackAdapter'
+                }
+            Mock -CommandName Install-Devcon -MockWith {
+                @{
+                    FullName = 'devcon'
+                }
+            }
+            Mock -CommandName devcon
+            Mock -CommandName Get-LoopbackAdapter -MockWith $script:adaptersWithOneLoopbackAdapter
+            Mock -CommandName Rename-NetAdapter
+            Mock -CommandName Set-NetIPInterface
+            Mock -CommandName Get-CimInstance -MockWith { '192.168.0.1' }
+            Mock -CommandName Start-Sleep
+
+            It 'Should not throw exception' {
+                {
+                    $script:loopbackAdapter = New-LoopbackAdapter -Name 'LoopbackAdapter' -Force -Verbose
+                } | Should -Not -Throw
+            }
+
+            It 'Should return the loopback adapter' {
+                $script:loopbackAdapter | Should -HaveCount 1
+                $script:loopbackAdapter | Should -BeExactly 'NewLoopbackAdapter'
+            }
+        }
+
+        Context 'When the adapter exists' {
+            Mock -CommandName Get-NetAdapter `
+                -ParameterFilter {
+                    $Name -eq 'LoopbackAdapter'
+                } `
+                -MockWith $script:adaptersWithOneLoopbackAdapter
+
+            It 'Should throw expected exception' {
+                {
+                    $script:loopbackAdapter = New-LoopbackAdapter -Name 'LoopbackAdapter' -Force -Verbose
+                } | Should -Throw ($LocalizedData.NetworkAdapterExistsError -f 'LoopbackAdapter')
+            }
+        }
+
+        Context 'When the adapter does not exist but does not appear after being created' {
+            $global:getNetAdapterCallCount = 0
+            Mock -CommandName Get-NetAdapter `
+                -ParameterFilter {
+                    $Name -eq 'LoopbackAdapter'
+                }
+            Mock -CommandName Get-NetAdapter
+            Mock -CommandName Install-Devcon -MockWith {
+                @{
+                    FullName = 'devcon'
+                }
+            }
+            Mock -CommandName devcon
+            Mock -CommandName Get-LoopbackAdapter -MockWith $script:adaptersWithOneLoopbackAdapter
+
+            It 'Should throw expected exception' {
+                {
+                    $script:loopbackAdapter = New-LoopbackAdapter -Name 'LoopbackAdapter' -Force -Verbose
+                } | Should -Throw ($LocalizedData.NewNetworkAdapterNotFoundError -f 'LoopbackAdapter')
+            }
+        }
     }
 
     Describe 'Remove-LoopbackAdapter' -Tag 'Unit' {
@@ -298,7 +376,16 @@ InModuleScope LoopbackAdapter {
         }
 
         Context 'When called with an adapter name and the adapter does exist and is a loopback adapter' {
-            Mock -CommandName Get-NetAdapter -MockWith @script:adaptersWithOneLoopbackAdapter
+            Mock -CommandName Get-NetAdapter `
+                -MockWith @script:adaptersWithOneLoopbackAdapter `
+                -ParameterFilter {
+                    $Name -eq 'LoopbackAdapter'
+                }
+            Mock -CommandName Get-NetAdapter `
+                -MockWith @script:adaptersWithOneLoopbackAdapter `
+                -ParameterFilter {
+                    $Name -eq 'LoopbackAdapter'
+                }
             Mock -CommandName Install-Devcon -MockWith {
                 @{
                     FullName = 'devcon'
