@@ -17,38 +17,43 @@ InModuleScope LoopbackAdapter {
         )
     }
 
-    $script:adaptersWithNoLoopbackAdapter = {
+    $script:adapterNormal = @{
+        Name = 'NormalAdapter'
+        DriverDescription = 'Not a Loopback Adapter'
+        PnPDeviceID = 'NormalDeviceId'
+    }
+    $script:adapterLoopback = @{
+        Name = 'LoopbackAdapter'
+        DriverDescription = 'Microsoft KM-TEST Loopback Adapter'
+        PnPDeviceID = 'LoopbackDeviceId'
+    }
+    $script:adapterLoopback1 = @{
+        Name = 'LoopbackAdapter1'
+        DriverDescription = 'Microsoft KM-TEST Loopback Adapter'
+        PnPDeviceID = 'LoopbackDeviceId1'
+    }
+    $script:adapterLoopback2 = @{
+        Name = 'LoopbackAdapter2'
+        DriverDescription = 'Microsoft KM-TEST Loopback Adapter'
+        PnPDeviceID = 'LoopbackDeviceId2'
+    }
+
+    $script:adaptersWithNoLoopbackAdapter_mock = {
         @(
-            @{
-                Name = 'NormalAdapter'
-                DriverDescription = 'Not a Loopback Adapter'
-                PnPDeviceID = 'NormalDeviceId'
-            }
+            $script:adapterNormal
         )
     }
 
-    $script:adaptersWithOneLoopbackAdapter = {
+    $script:adaptersWithOneLoopbackAdapter_mock = {
         @(
-            @{
-                Name = 'LoopbackAdapter'
-                DriverDescription = 'Microsoft KM-TEST Loopback Adapter'
-                PnPDeviceID = 'LoopbackDeviceId'
-            }
+            $script:adapterLoopback
         )
     }
 
-    $script:adaptersWithTwoLoopbackAdapters = {
+    $script:adaptersWithTwoLoopbackAdapters_mock = {
         @(
-            @{
-                Name = 'LoopbackAdapter1'
-                DriverDescription = 'Microsoft KM-TEST Loopback Adapter'
-                PnPDeviceID = 'LoopbackDeviceId1'
-            },
-            @{
-                Name = 'LoopbackAdapter2'
-                DriverDescription = 'Microsoft KM-TEST Loopback Adapter'
-                PnPDeviceID = 'LoopbackDeviceId2'
-            }
+            $script:adapterLoopback1
+            $script:adapterLoopback2
         )
     }
 
@@ -66,7 +71,7 @@ InModuleScope LoopbackAdapter {
         }
 
         Context 'When called with no adapter name and no Loopback Adapters exist' {
-            Mock -CommandName Get-NetAdapter -MockWith @script:adaptersWithNoLoopbackAdapter
+            Mock -CommandName Get-NetAdapter -MockWith @script:adaptersWithNoLoopbackAdapter_mock
 
             It 'Should return null' {
                 Get-LoopbackAdapter -Verbose | Should -BeNullOrEmpty
@@ -74,7 +79,7 @@ InModuleScope LoopbackAdapter {
         }
 
         Context 'When called with no adapter name and one Loopback Adapter exists' {
-            Mock -CommandName Get-NetAdapter -MockWith @script:adaptersWithOneLoopbackAdapter
+            Mock -CommandName Get-NetAdapter -MockWith @script:adaptersWithOneLoopbackAdapter_mock
 
             It 'Should return expected loopback adapter' {
                 $adapters = Get-LoopbackAdapter -Verbose
@@ -85,7 +90,7 @@ InModuleScope LoopbackAdapter {
         }
 
         Context 'When called with no adapter name and two Loopback Adapter exists' {
-            Mock -CommandName Get-NetAdapter -MockWith @script:adaptersWithTwoLoopbackAdapters
+            Mock -CommandName Get-NetAdapter -MockWith @script:adaptersWithTwoLoopbackAdapters_mock
 
             It 'Should return two expected loopback adpaters' {
                 $adapters = Get-LoopbackAdapter -Verbose
@@ -108,7 +113,7 @@ InModuleScope LoopbackAdapter {
         }
 
         Context 'When called with an adapter name and the adapter does exist and is a loopback adapter' {
-            Mock -CommandName Get-NetAdapter -MockWith @script:adaptersWithOneLoopbackAdapter
+            Mock -CommandName Get-NetAdapter -MockWith @script:adaptersWithOneLoopbackAdapter_mock
 
             It 'Should return expected loopback adapter' {
                 $adapters = Get-LoopbackAdapter -Name 'LoopbackAdapter' -Verbose
@@ -119,7 +124,7 @@ InModuleScope LoopbackAdapter {
         }
 
         Context 'When called with an adapter name and the adapter does exist and is not a loopback adapter' {
-            Mock -CommandName Get-NetAdapter -MockWith @script:adaptersWithNoLoopbackAdapter
+            Mock -CommandName Get-NetAdapter -MockWith @script:adaptersWithNoLoopbackAdapter_mock
 
             It 'Should throw expected exception' {
                 {
@@ -289,6 +294,7 @@ InModuleScope LoopbackAdapter {
                 } `
                 -MockWith {
                     $global:getNetAdapterCallCount++
+                    return $null
                 }
             Mock -CommandName Get-NetAdapter `
                 -ParameterFilter {
@@ -297,7 +303,11 @@ InModuleScope LoopbackAdapter {
                 } `
                 -MockWith {
                     $global:getNetAdapterCallCount++
-                    'NewLoopbackAdapter'
+                    return $script:adapterLoopback
+                }
+            Mock -CommandName Get-NetAdapter `
+                -MockWith {
+                    return $script:adapterLoopback
                 }
             Mock -CommandName Install-Devcon -MockWith {
                 @{
@@ -305,7 +315,7 @@ InModuleScope LoopbackAdapter {
                 }
             }
             Mock -CommandName devcon
-            Mock -CommandName Get-LoopbackAdapter -MockWith $script:adaptersWithOneLoopbackAdapter
+            Mock -CommandName Get-LoopbackAdapter -MockWith $script:adaptersWithNoLoopbackAdapter_mock
             Mock -CommandName Rename-NetAdapter
             Mock -CommandName Set-NetIPInterface
             Mock -CommandName Get-CimInstance -MockWith { '192.168.0.1' }
@@ -319,7 +329,7 @@ InModuleScope LoopbackAdapter {
 
             It 'Should return the loopback adapter' {
                 $script:loopbackAdapter | Should -HaveCount 1
-                $script:loopbackAdapter | Should -BeExactly 'NewLoopbackAdapter'
+                $script:loopbackAdapter.Name | Should -BeExactly 'LoopbackAdapter'
             }
         }
 
@@ -328,7 +338,7 @@ InModuleScope LoopbackAdapter {
                 -ParameterFilter {
                     $Name -eq 'LoopbackAdapter'
                 } `
-                -MockWith $script:adaptersWithOneLoopbackAdapter
+                -MockWith $script:adaptersWithOneLoopbackAdapter_mock
 
             It 'Should throw expected exception' {
                 {
@@ -350,7 +360,7 @@ InModuleScope LoopbackAdapter {
                 }
             }
             Mock -CommandName devcon
-            Mock -CommandName Get-LoopbackAdapter -MockWith $script:adaptersWithOneLoopbackAdapter
+            Mock -CommandName Get-LoopbackAdapter -MockWith $script:adaptersWithOneLoopbackAdapter_mock
 
             It 'Should throw expected exception' {
                 {
@@ -377,12 +387,12 @@ InModuleScope LoopbackAdapter {
 
         Context 'When called with an adapter name and the adapter does exist and is a loopback adapter' {
             Mock -CommandName Get-NetAdapter `
-                -MockWith @script:adaptersWithOneLoopbackAdapter `
+                -MockWith @script:adaptersWithOneLoopbackAdapter_mock `
                 -ParameterFilter {
                     $Name -eq 'LoopbackAdapter'
                 }
             Mock -CommandName Get-NetAdapter `
-                -MockWith @script:adaptersWithOneLoopbackAdapter `
+                -MockWith @script:adaptersWithOneLoopbackAdapter_mock `
                 -ParameterFilter {
                     $Name -eq 'LoopbackAdapter'
                 }
@@ -401,7 +411,7 @@ InModuleScope LoopbackAdapter {
         }
 
         Context 'When called with an adapter name and the adapter does exist but is not a loopback adapter' {
-            Mock -CommandName Get-NetAdapter -MockWith @script:adaptersWithNoLoopbackAdapter
+            Mock -CommandName Get-NetAdapter -MockWith @script:adaptersWithNoLoopbackAdapter_mock
 
             It 'Should throw expected exception' {
                 {

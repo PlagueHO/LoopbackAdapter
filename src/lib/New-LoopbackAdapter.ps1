@@ -44,7 +44,8 @@ function New-LoopbackAdapter
     $null = & $DevConExe @('install', "$($ENV:SystemRoot)\inf\netloop.inf", '*MSLOOP')
 
     # Find the newly added Loopback Adapter
-    $adapter = Get-NetAdapter |
+    $adapters = Get-NetAdapter
+    $adapter = $adapters |
         Where-Object -FilterScript {
             ($_.PnPDeviceID -notin $ExistingAdapters ) -and `
             ($_.DriverDescription -eq 'Microsoft KM-TEST Loopback Adapter')
@@ -57,7 +58,8 @@ function New-LoopbackAdapter
 
     # Rename the new Loopback adapter
     Write-Verbose -Message ($LocalizedData.SettingNameOfNewLoopbackAdapterMessage -f $Name)
-    $adapter | Rename-NetAdapter `
+    $null = Rename-NetAdapter `
+        -Name $adapter.Name `
         -NewName $Name `
         -ErrorAction Stop
 
