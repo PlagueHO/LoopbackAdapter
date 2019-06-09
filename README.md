@@ -1,4 +1,32 @@
-# LoopbackAdapter
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/PlagueHO/LoopbackAdapter/blob/dev/LICENSE)
+[![Documentation - LoopbackAdapter](https://img.shields.io/badge/Documentation-LoopbackAdapter-blue.svg)](https://github.com/PlagueHO/LoopbackAdapter/wiki)
+[![PowerShell Gallery - LoopbackAdapter](https://img.shields.io/badge/PowerShell%20Gallery-LoopbackAdapter-blue.svg)](https://www.powershellgallery.com/packages/LoopbackAdapter)
+[![Minimum Supported PowerShell Version](https://img.shields.io/badge/PowerShell-5.1-blue.svg)](https://github.com/PlagueHO/LoopbackAdapter)
+[![Minimum Supported PowerShell Core Version](https://img.shields.io/badge/PowerShell_Core-6.0-blue.svg)](https://github.com/PlagueHO/LoopbackAdapter)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/1ee50b5eb15b47c188b3bdf7a5f8ee1d)](https://www.codacy.com/app/PlagueHO/LoopbackAdapter?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=PlagueHO/CosmosDB&amp;utm_campaign=Badge_Grade)
+
+# LoopbackAdapter PowerShell Module
+
+## Module Build Status
+
+| Branch | AzurePipelines CI                      | AppVeyor CI                            | Code Coverage                          |
+| ------ | -------------------------------------- | -------------------------------------- | -------------------------------------- |
+| dev    | [![ap-image-dev][]][ap-site-dev]       | [![av-image-dev][]][av-site-dev]       | [![cc-image-dev][]][cc-site-dev]       |
+| master | [![ap-image-master][]][ap-site-master] | [![av-image-master][]][av-site-master] | [![cc-image-master][]][cc-site-master] |
+
+## Table of Contents
+
+- [Introduction](#introduction)
+- [Description](#description)
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Compatibility and Testing](#compatibility-and-testing)
+- [Contributing](#contributing)
+- [Cmdlets](#cmdlets)
+- [Change Log](#change-log)
+- [Links](#links)
+
+## Introduction
 
 [![Build status](https://ci.appveyor.com/api/projects/status/qb67s7iw1jp7e32t/branch/master?svg=true)](https://ci.appveyor.com/project/PlagueHO/loopbackadapter/branch/master)
 
@@ -16,7 +44,6 @@ Chocolatey is not installed it will be downloaded from the internet and installe
 automatically. The user will be asked to confirm these actions unless the -force
 parameter is used.
 
-
 ## Requirements
 
 Using this module requires:
@@ -28,167 +55,68 @@ Using this module requires:
 
 ## Installation
 
-| Installation if WMF5.0 is Installed:
+To install the module from PowerShell Gallery, use the PowerShell Cmdlet:
+
+```powershell
+Install-Module -Name LoopbackAdapter
+```
+
+## Compatibility and Testing
+
+This PowerShell module is automatically tested and validated to run
+on the following systems:
+
+- Windows Server (using Windows PowerShell 5.1):
+  - Windows Server 2012 R2: Using [AppVeyor CI](https://ci.appveyor.com/project/PlagueHO/LoopbackAdapter).
+  - Windows Server 2016: Using [AppVeyor CI](https://ci.appveyor.com/project/PlagueHO/LoopbackAdapter).
+  - Windows Server 2016: Using [Azure Pipelines](https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4).
+
+This module should function correctly on other systems and configurations
+but is not automatically tested with them in every change.
+
+## Contributing
+
+If you wish to contribute to this project, please read the [Contributing.md](/.github/CONTRIBUTING.md)
+document first. We would be very grateful of any contributions.
+
+## Cmdlets
+
+A list of Cmdlets in the _LoopbackAdapter PowerShell module_ can be found by running
+the following PowerShell commands:
 
 ```PowerShell
-Install-Module -Name LoopbackAdapter -MinimumVersion 1.2.0.0
-```
-
-| Installation if WMF5.0 is Not Installed
-
-Copy the included LoopbackAdapter.psd1 and LoopbackAdapter.psm1 files into a folder
-called LoopbackAdapter in either one of these folders:
-
-* ```$ENV:ProgramFiles\WindowsPowerShell\Modules```
-* ```$ENV:UserProfile\Documents\WindowsPowerShell\Modules```
-
-## Usage Example
-
-Install two Loopback Adapters called LoopbackAdapter1 and LoopbackAdapter2:
-
-```powershell
 Import-Module -Name LoopbackAdapter
-New-LoopbackAdapter -Name 'LoopbackAdapter1'
-New-LoopbackAdapter -Name 'LoopbackAdapter2'
+Get-Command -Module LoopbackAdapter
 ```
 
-## Functions
+Help on individual Cmdlets can be found in the built-in Cmdlet help:
 
-### New-LoopbackAdapter
-
-#### Synopsis
-
-Install a new Loopback Network Adapter.
-
-#### Description
-
-Uses Chocolatey to download the DevCon (Windows Device Console) package and uses
-it to install a new Loopback Network Adapter with the name specified.
-The Loopback Adapter will need to be configured like any other adapter (e.g.
-configure IP and DNS)
-
-#### Parameter Name
-
-The name of the Loopback Adapter to create.
-
-#### Parameter Force
-
-Force the install of Chocolatey and the Devcon.portable package if not already
-installed, without confirming with the user.
-
-#### Example
-
-```powershell
-$Adapter = New-LoopbackAdapter -Name 'MyNewLoopback'
+```PowerShell
+Get-Help -Name Get-LoopbackAdapter
 ```
 
-Creates a new Loopback Adapter called MyNewLoopback.
+The details of the cmdlets contained in this module can also be
+found in the [wiki](https://github.com/PlagueHO/LoopbackAdapter/wiki).
 
-#### Outputs
+## Change Log
 
-Returns the newly created Loopback Adapter.
-
-#### Component
-
-LoopbackAdapter
-
-### Get-LoopbackAdapter
-
-#### Synopsis
-
-Returns a specified Loopback Network Adapter or all Loopback Adapters.
-
-#### Description
-
-This function will return either the Loopback Adapter specified in the $Name
-parameter or all Loopback Adapters.
-It will only return adapters that use the Microsoft KM-TEST Loopback Adapter driver.
-
-This function does not use Chocolatey or the DevCon (Device Console) application,
-so does not require administrator access.
-
-#### Parameter Name
-
-The name of the Loopback Adapter to return.
-If not specified all Loopback Adapters will be returned.
-
-#### Example
-
-```powershell
-$Adapter = Get-LoopbackAdapter -Name 'MyNewLoopback'
-```
-
-Returns the Loopback Adapter called MyNewLoopback. If this Loopback Adapter does
-not exist or does not use the Microsoft KM-TEST Loopback Adapter driver then an
-exception will be thrown.
-
-#### Outputs
-
-Returns a specific Loopback Adapter or all Loopback adapters.
-
-#### Component
-
-LoopbackAdapter
-
-### Remove-LoopbackAdapter
-
-#### Synopsis
-
-Uninstall an existing Loopback Network Adapter.
-
-#### Description
-
-Uses Chocolatey to download the DevCon (Windows Device Console) package and
-uses it to uninstall a new Loopback Network Adapter with the name specified.
-
-#### Parameter Name
-
-The name of the Loopback Adapter to create.
-
-#### Parameter Force
-
-Force the install of Chocolatey and the Devcon.portable package if not already
-installed, without confirming with the user.
-
-#### Example
-
-```powershell
-Remove-LoopbackAdapter -Name 'MyNewLoopback'
-```
-
-Removes an existing Loopback Adapter called MyNewLoopback.
-
-#### Outputs
-
-None
-
-#### Component
-
-LoopbackAdapter
-
-## Versions
-
-### 1.2.1.0
-
-* Using FullName to prevent issues with the path environment variable
-
-### 1.2.0.0
-
-* Cleanup README.MD markdown.
-* Improved detection of OS bits.
-
-### 1.1.0.0
-
-* New-LoopbackAdapter: Added delay to ensure New adapter is available to CIM.
-                       Exception now causes function to stop correctly.
-
-### 1.0.0.0
-
-* Initial Release.
+For a list of changes to versions, see the [CHANGELOG.md](CHANGELOG.md) file.
 
 ## Links
 
-* **[GitHub Repo](https://github.com/PlagueHO/LoopbackAdapter)**: Raise any issues,
-  requests or PRs here.
-* **[My Blog](https://dscottraynsford.wordpress.com)**: See my PowerShell and
-  Programming Blog.
+- [GitHub Repository](https://github.com/PlagueHO/LoopbackAdapter/)
+- [Blog](https://dscottraynsford.wordpress.com/)
+
+[ap-image-dev]: https://dscottraynsford.visualstudio.com/GitHub/_apis/build/status/PlagueHO.LoopbackAdapter?branchName=dev
+[ap-site-dev]: https://dscottraynsford.visualstudio.com/GitHub/_build/latest?definitionId=12&branchName=dev
+[av-image-dev]: https://ci.appveyor.com/api/projects/status/qb67s7iw1jp7e32t/branch/dev?svg=true
+[av-site-dev]: https://ci.appveyor.com/project/PlagueHO/loopbackadapter/branch/dev
+[cc-image-dev]: https://codecov.io/gh/PlagueHO/LoopbackAdapter/branch/dev/graph/badge.svg
+[cc-site-dev]: https://codecov.io/gh/PlagueHO/LoopbackAdapter/branch/dev
+
+[ap-image-master]: https://dscottraynsford.visualstudio.com/GitHub/_apis/build/status/PlagueHO.LoopbackAdapter?branchName=master
+[ap-site-master]: https://dscottraynsford.visualstudio.com/GitHub/_build/latest?definitionId=12&branchName=master
+[av-image-master]: https://ci.appveyor.com/api/projects/status/qb67s7iw1jp7e32t/branch/master?svg=true
+[av-site-master]: https://ci.appveyor.com/project/PlagueHO/loopbackadapter/branch/master
+[cc-image-master]: https://codecov.io/gh/PlagueHO/LoopbackAdapter/branch/master/graph/badge.svg
+[cc-site-master]: https://codecov.io/gh/PlagueHO/LoopbackAdapter/branch/master
