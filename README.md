@@ -4,6 +4,7 @@
 [![Minimum Supported PowerShell Version](https://img.shields.io/badge/PowerShell-5.1-blue.svg)](https://github.com/PlagueHO/LoopbackAdapter)
 [![Minimum Supported PowerShell Core Version](https://img.shields.io/badge/PowerShell_Core-6.0-blue.svg)](https://github.com/PlagueHO/LoopbackAdapter)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/1ee50b5eb15b47c188b3bdf7a5f8ee1d)](https://www.codacy.com/app/PlagueHO/LoopbackAdapter?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=PlagueHO/CosmosDB&amp;utm_campaign=Badge_Grade)
+[![PowerShell Gallery](https://img.shields.io/powershellgallery/dt/loopbackadapter.svg)](https://www.powershellgallery.com/packages/LoopbackAdapter)
 
 # LoopbackAdapter PowerShell Module
 

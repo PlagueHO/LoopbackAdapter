@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Change `psakefile.ps1` to detect Azure Pipelines correctly.
+- Added PowerShell Gallery badge to `README.md`.
 
 ## 1.2.1.14
 
