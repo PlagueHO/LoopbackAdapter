@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Change `psakefile.ps1` to detect Azure Pipelines correctly.
+
+## 1.2.1.14
+
 - Using FullName to prevent issues with the path environment variable.
 - Improved repository structure.
 - Added unit tests and integration tests.

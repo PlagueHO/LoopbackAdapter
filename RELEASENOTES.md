@@ -1,6 +1,6 @@
 # Release Notes
 
-## What is New in LoopbackAdapter Unreleased
+## What is New in LoopbackAdapter 1.2.1.14
 
 June 8, 2019
 

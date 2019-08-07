@@ -4,7 +4,7 @@
     RootModule        = 'LoopbackAdapter.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '1.2.1.1'
+    ModuleVersion     = '1.2.1.14'
 
     # ID used to uniquely identify this module
     GUID              = '4a5b8ffe-3ca1-4a57-8dcc-4ed983a7b90f'
@@ -95,7 +95,7 @@
 
             # ReleaseNotes of this module
             ReleaseNotes = '
-## What is New in LoopbackAdapter Unreleased
+## What is New in LoopbackAdapter 1.2.1.14
 
 June 8, 2019
 
