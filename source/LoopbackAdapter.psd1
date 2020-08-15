@@ -85,7 +85,7 @@
             Tags         = @('Loopback', 'Network', 'Adapter')
 
             # A URL to the license for this module.
-            LicenseUri   = 'https://github.com/PlagueHO/LoopbackAdapter/blob/master/LICENSE'
+            LicenseUri   = 'https://github.com/PlagueHO/LoopbackAdapter/blob/main/LICENSE'
 
             # A URL to the main website for this project.
             ProjectUri   = 'https://github.com/PlagueHO/LoopbackAdapter'
