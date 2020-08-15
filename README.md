@@ -12,7 +12,7 @@
 
 | Branch | Azure Pipelines                    | Automated Tests                    | Code Quality                       |
 | ------ | -----------------------------------| ---------------------------------- | ---------------------------------- |
-| main   | [![ap-image-main][]][ap-site-main] | [![av-image-main][]][ts-site-main] | [![cc-image-main][]][cq-site-main] |
+| main   | [![ap-image-main][]][ap-site-main] | [![ts-image-main][]][ts-site-main] | [![cq-image-main][]][cq-site-main] |
 
 ## Table of Contents
 

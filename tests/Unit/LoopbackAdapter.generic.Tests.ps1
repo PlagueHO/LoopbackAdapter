@@ -14,7 +14,7 @@ $modulePath = (Get-Module -Name $ProjectName).Path
 $moduleManifestPath = Join-Path -Path ((Get-Module -Name $ProjectName).ModuleBase) -ChildPath "$ProjectName.psd1"
 $scriptAnalyzerSettingsPath = "$ProjectPath\PSScriptAnalyzerSettings.psd1"
 
-Describe 'CosmosDB Module' {
+Describe 'LoopbackAdapter Module' {
     if ($PSVersionTable.PSVersion.Major -eq 6 -and $PSVersionTable.PSVersion -lt [System.Version] '6.2.4')
     {
         Write-Warning -Message ('Minimum supported version of PSScriptAnalyzer for PowerShell Core is 6.2.4 but current version is "{0}".' -f $PSVersionTable.PSVersion)
