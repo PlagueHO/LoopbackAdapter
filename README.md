@@ -10,9 +10,9 @@
 
 ## Module Build Status
 
-| Branch | Azure Pipelines                        | Automated Tests                        | Code Quality                           |
-| ------ | -------------------------------------- | -------------------------------------- | -------------------------------------- |
-| master | [![ap-image-master][]][ap-site-master] | [![av-image-master][]][ts-site-master] | [![cc-image-master][]][cq-site-master] |
+| Branch | Azure Pipelines                    | Automated Tests                    | Code Quality                       |
+| ------ | -----------------------------------| ---------------------------------- | ---------------------------------- |
+| main   | [![ap-image-main][]][ap-site-main] | [![av-image-main][]][ts-site-main] | [![cc-image-main][]][cq-site-main] |
 
 ## Table of Contents
 

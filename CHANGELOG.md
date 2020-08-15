@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added PowerShell Gallery badge to `README.md`.
 - Remove AppVeyor CI pipeline and updated to new Continuous Delivery
   pattern using Azure DevOps - fixes [Issue #16](https://github.com/PlagueHO/LoopbackAdapter/issues/16).
+- Renamed `master` branch to `main`.
 
 ## [1.2.1.14] - 2019-06-09
 
