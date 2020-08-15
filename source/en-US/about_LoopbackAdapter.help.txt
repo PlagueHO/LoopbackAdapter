@@ -1,0 +1,23 @@
+TOPIC
+    about_LoopbackAdapter
+
+SHORT DESCRIPTION
+    PowerShell module for working with Loopback Adapters.
+
+LONG DESCRIPTION
+    This module provides support for creating and removing Loopback Network Adapters
+    on Windows using Device Console (DevCon.exe).
+
+EXAMPLES
+    PS C:\> Get-Command -Module LoopbackAdapter
+
+TROUBLESHOOTING NOTE:
+    Go to the Github repository for read about issues, submit a new issue, and read
+    about new releases. https://github.com/PlagueHO/LoopbackAdapter
+
+SEE ALSO
+  - https://github.com/PlagueHO/LoopbackAdapter
+
+KEYWORDS
+      LoopbackAdapter
+

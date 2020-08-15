@@ -4,16 +4,15 @@
 [![PowerShell Gallery](https://img.shields.io/powershellgallery/dt/loopbackadapter.svg)](https://www.powershellgallery.com/packages/LoopbackAdapter)
 [![Minimum Supported PowerShell Version](https://img.shields.io/badge/PowerShell-5.1-blue.svg)](https://github.com/PlagueHO/LoopbackAdapter)
 [![Minimum Supported PowerShell Core Version](https://img.shields.io/badge/PSCore-6.0-blue.svg)](https://github.com/PlagueHO/LoopbackAdapter)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/1ee50b5eb15b47c188b3bdf7a5f8ee1d)](https://www.codacy.com/app/PlagueHO/LoopbackAdapter?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=PlagueHO/CosmosDB&amp;utm_campaign=Badge_Grade)
+[![Minimum Supported PowerShell Version](https://img.shields.io/badge/PS-7.0-blue.svg)](https://github.com/PlagueHO/LoopbackAdapter)
 
 # LoopbackAdapter PowerShell Module
 
 ## Module Build Status
 
-| Branch | AzurePipelines CI                      | AppVeyor CI                            | Code Coverage                          |
+| Branch | Azure Pipelines                        | Automated Tests                        | Code Quality                           |
 | ------ | -------------------------------------- | -------------------------------------- | -------------------------------------- |
-| dev    | [![ap-image-dev][]][ap-site-dev]       | [![av-image-dev][]][av-site-dev]       | [![cc-image-dev][]][cc-site-dev]       |
-| master | [![ap-image-master][]][ap-site-master] | [![av-image-master][]][av-site-master] | [![cc-image-master][]][cc-site-master] |
+| master | [![ap-image-master][]][ap-site-master] | [![av-image-master][]][ts-site-master] | [![cc-image-master][]][cq-site-master] |
 
 ## Table of Contents
 
@@ -106,16 +105,9 @@ For a list of changes to versions, see the [CHANGELOG.md](CHANGELOG.md) file.
 - [GitHub Repository](https://github.com/PlagueHO/LoopbackAdapter/)
 - [Blog](https://dscottraynsford.wordpress.com/)
 
-[ap-image-dev]: https://dscottraynsford.visualstudio.com/GitHub/_apis/build/status/PlagueHO.LoopbackAdapter?branchName=dev
-[ap-site-dev]: https://dscottraynsford.visualstudio.com/GitHub/_build/latest?definitionId=12&branchName=dev
-[av-image-dev]: https://ci.appveyor.com/api/projects/status/qb67s7iw1jp7e32t/branch/dev?svg=true
-[av-site-dev]: https://ci.appveyor.com/project/PlagueHO/loopbackadapter/branch/dev
-[cc-image-dev]: https://codecov.io/gh/PlagueHO/LoopbackAdapter/branch/dev/graph/badge.svg
-[cc-site-dev]: https://codecov.io/gh/PlagueHO/LoopbackAdapter/branch/dev
-
-[ap-image-master]: https://dscottraynsford.visualstudio.com/GitHub/_apis/build/status/PlagueHO.LoopbackAdapter?branchName=master
-[ap-site-master]: https://dscottraynsford.visualstudio.com/GitHub/_build/latest?definitionId=12&branchName=master
-[av-image-master]: https://ci.appveyor.com/api/projects/status/qb67s7iw1jp7e32t/branch/master?svg=true
-[av-site-master]: https://ci.appveyor.com/project/PlagueHO/loopbackadapter/branch/master
-[cc-image-master]: https://codecov.io/gh/PlagueHO/LoopbackAdapter/branch/master/graph/badge.svg
-[cc-site-master]: https://codecov.io/gh/PlagueHO/LoopbackAdapter/branch/master
+[ap-image-main]: https://dev.azure.com/dscottraynsford/GitHub/_apis/build/status/PlagueHO.LoopbackAdapter.main?branchName=main
+[ap-site-main]: https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4&_a=summary
+[ts-image-main]: https://img.shields.io/azure-devops/tests/dscottraynsford/GitHub/4/main
+[ts-site-main]: https://dev.azure.com/dscottraynsford/GitHub/_build/latest?definitionId=4&branchName=main
+[cq-image-main]: https://api.codacy.com/project/badge/Grade/1ee50b5eb15b47c188b3bdf7a5f8ee1d
+[cq-site-main]: https://www.codacy.com/app/PlagueHO/LoopbackAdapter?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=PlagueHO/LoopbackAdapter&amp;utm_campaign=Badge_Grade
