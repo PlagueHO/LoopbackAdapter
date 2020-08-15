@@ -106,8 +106,8 @@ For a list of changes to versions, see the [CHANGELOG.md](CHANGELOG.md) file.
 - [Blog](https://dscottraynsford.wordpress.com/)
 
 [ap-image-main]: https://dev.azure.com/dscottraynsford/GitHub/_apis/build/status/PlagueHO.LoopbackAdapter.main?branchName=main
-[ap-site-main]: https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=4&_a=summary
-[ts-image-main]: https://img.shields.io/azure-devops/tests/dscottraynsford/GitHub/4/main
-[ts-site-main]: https://dev.azure.com/dscottraynsford/GitHub/_build/latest?definitionId=4&branchName=main
-[cq-image-main]: https://api.codacy.com/project/badge/Grade/1ee50b5eb15b47c188b3bdf7a5f8ee1d
-[cq-site-main]: https://www.codacy.com/app/PlagueHO/LoopbackAdapter?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=PlagueHO/LoopbackAdapter&amp;utm_campaign=Badge_Grade
+[ap-site-main]: https://dev.azure.com/dscottraynsford/GitHub/_build?definitionId=12&_a=summary
+[ts-image-main]: https://img.shields.io/azure-devops/tests/dscottraynsford/GitHub/12/main
+[ts-site-main]: https://dev.azure.com/dscottraynsford/GitHub/_build/latest?definitionId=12&branchName=main
+[cq-image-main]: https://app.codacy.com/project/badge/Grade/8d10f564ae98479dbb47bbb19363d4f1
+[cq-site-main]: https://www.codacy.com/manual/PlagueHO/LoopbackAdapter?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=PlagueHO/LoopbackAdapter&amp;utm_campaign=Badge_Grade

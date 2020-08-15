@@ -4,7 +4,7 @@
     RootModule        = 'LoopbackAdapter.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '1.2.1.14'
+    ModuleVersion     = '0.0.1'
 
     # ID used to uniquely identify this module
     GUID              = '4a5b8ffe-3ca1-4a57-8dcc-4ed983a7b90f'
@@ -61,13 +61,13 @@
     FunctionsToExport = @('New-LoopbackAdapter', 'Get-LoopbackAdapter', 'Remove-LoopbackAdapter')
 
     # Cmdlets to export from this module
-    CmdletsToExport   = @('New-LoopbackAdapter', 'Get-LoopbackAdapter', 'Remove-LoopbackAdapter')
+    CmdletsToExport   = '*'
 
     # Variables to export from this module
     VariablesToExport = '*'
 
     # Aliases to export from this module
-    AliasesToExport   = '*'
+    AliasesToExport   = @()
 
     # DSC resources to export from this module
     # DscResourcesToExport = @()
@@ -82,30 +82,20 @@
     PrivateData       = @{
         PSData = @{
             # Tags applied to this module. These help with module discovery in online galleries.
-            Tags       = @('Loopback', 'Network', 'Adapter')
+            Tags         = @('Loopback', 'Network', 'Adapter')
 
             # A URL to the license for this module.
-            LicenseUri = 'https://github.com/PlagueHO/LoopbackAdapter/blob/master/LICENSE'
+            LicenseUri   = 'https://github.com/PlagueHO/LoopbackAdapter/blob/master/LICENSE'
 
             # A URL to the main website for this project.
-            ProjectUri = 'https://github.com/PlagueHO/LoopbackAdapter'
+            ProjectUri   = 'https://github.com/PlagueHO/LoopbackAdapter'
 
             # A URL to an icon representing this module.
             # IconUri = ''
 
             # ReleaseNotes of this module
-            ReleaseNotes = '
-## What is New in LoopbackAdapter 1.2.1.14
-
-June 8, 2019
-
-- Using FullName to prevent issues with the path environment variable.
-- Improved repository structure.
-- Added unit tests and integration tests.
-- Added CI process for AppVeyor and Azure Pipelines.
-'
+            ReleaseNotes = ''
         } # End of PSData hashtable
-
     } # End of PrivateData hashtable
 
     # HelpInfo URI of this module
