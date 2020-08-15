@@ -1,14 +1,16 @@
-[System.Diagnostics.CodeAnalysis.SuppressMessage('PSAvoIdUsingConvertToSecureStringWithPlainText', '')]
+[System.Diagnostics.CodeAnalysis.SuppressMessage('PSAvoidUsingConvertToSecureStringWithPlainText', '')]
 [CmdletBinding()]
-param (
-)
+param ()
 
-$ModuleManifestName = 'LoopbackAdapter.psd1'
-$ModuleManifestPath = "$PSScriptRoot\..\..\src\$ModuleManifestName"
+$ProjectPath = "$PSScriptRoot\..\.." | Convert-Path
+$ProjectName = ((Get-ChildItem -Path $ProjectPath\*\*.psd1).Where{
+        ($_.Directory.Name -match 'source|src' -or $_.Directory.Name -eq $_.BaseName) -and
+        $(try { Test-ModuleManifest $_.FullName -ErrorAction Stop } catch { $false } )
+    }).BaseName
 
-Import-Module -Name $ModuleManifestPath -Force -Verbose:$false
+Import-Module -Name $ProjectName -Force
 
-InModuleScope LoopbackAdapter {
+InModuleScope $ProjectName {
     function devcon
     {
         param
