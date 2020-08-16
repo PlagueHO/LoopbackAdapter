@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Remove AppVeyor CI pipeline and updated to new Continuous Delivery
   pattern using Azure DevOps - fixes [Issue #16](https://github.com/PlagueHO/LoopbackAdapter/issues/16).
 - Renamed `master` branch to `main`.
+- Moved source files into `Private` and `Public` folders in `source`.
 
 ## [1.2.1.14] - 2019-06-09
 
