@@ -83,7 +83,7 @@ Pester:
 Resolve-Dependency:
   Gallery: 'PSGallery'
   AllowPrerelease: true
-  Verbose: false
+  Verbose: true
 
 ModuleBuildTasks:
   Sampler:
