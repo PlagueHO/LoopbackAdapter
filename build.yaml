@@ -82,7 +82,7 @@ Pester:
 
 Resolve-Dependency:
   Gallery: 'PSGallery'
-  AllowPrerelease: false
+  AllowPrerelease: true
   Verbose: false
 
 ModuleBuildTasks:
