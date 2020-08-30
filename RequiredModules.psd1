@@ -13,6 +13,6 @@
     Platyps             = 'latest'
     ModuleBuilder       = 'latest'
     ChangelogManagement = 'latest'
-    Sampler             = '0.106.0-preview0005'
+    Sampler             = 'latest'
     MarkdownLinkCheck   = 'latest'
 }
