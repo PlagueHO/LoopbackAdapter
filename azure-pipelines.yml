@@ -247,3 +247,4 @@ stages:
               pwsh: true
             env:
               GitHubToken: $(GitHubToken)
+              MainGitBranch: main
