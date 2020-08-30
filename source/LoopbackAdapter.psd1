@@ -58,7 +58,7 @@
     # NestedModules = @()
 
     # Functions to export from this module
-    FunctionsToExport = @('New-LoopbackAdapter', 'Get-LoopbackAdapter', 'Remove-LoopbackAdapter')
+    FunctionsToExport = @()
 
     # Cmdlets to export from this module
     CmdletsToExport   = '*'
