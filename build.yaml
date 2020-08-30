@@ -107,3 +107,4 @@ GitHubConfig:
   GitHubConfigUserEmail: plagueho@gmail.com
   UpdateChangelogOnPrerelease: false
   MainGitBranch: main
+  ReleaseBranch: main
