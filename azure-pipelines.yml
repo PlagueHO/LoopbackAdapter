@@ -235,6 +235,8 @@ stages:
             env:
               GitHubToken: $(GitHubToken)
               GalleryApiToken: $(GalleryApiToken)
+              ReleaseBranch: main
+              MainGitBranch: main
 
           - task: PowerShell@2
             name: send_changelog_PR
