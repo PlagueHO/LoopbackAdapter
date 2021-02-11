@@ -21,6 +21,11 @@ BuildWorkflow:
         to load YamlDotNet.dll which conflicts with one loaded by
         Module-Builder.
       #>
+      if ([System.String]::IsNullOrEmpty($ProjectName))
+      {
+          $ProjectName = Get-ProjectName -BuildRoot $BuildRoot
+      }
+
       if ([System.String]::IsNullOrEmpty($ENV:ModuleVersion))
       {
         Write-Host -Object 'ModuleVersion environment variable is not defined.'
