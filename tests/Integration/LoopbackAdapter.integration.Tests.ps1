@@ -40,5 +40,10 @@ Describe 'LoopbackAdapter Module' -Tag 'Integration' {
         It 'Should have removed the loopback adapter' {
             Get-NetAdapter | Where-Object -FilterScript { $_.Name -eq  $script:testAdapterName } | Should -BeNullOrEmpty
         }
+
+        It 'Should take pipeline input from Get-LoopbackAdapter' {
+            New-LoopbackAdapter -Name $script:testAdapterName -Force
+            Get-LoopbackAdapter -Name $script:testAdapterName | Remove-LoopbackAdapter -Force -Verbose
+        }
     }
 }
