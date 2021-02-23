@@ -356,6 +356,11 @@ InModuleScope $ProjectName {
                     $Name -eq 'LoopbackAdapter'
                 }
             Mock -CommandName Get-NetAdapter
+            Mock -CommandName Get-NetAdapter `
+                -ParameterFilter {
+                    $Name -eq '*'
+                } `
+                -MockWith @script:adaptersWithNoLoopbackAdapter_mock
             Mock -CommandName Install-Devcon -MockWith {
                 @{
                     FullName = 'devcon'
@@ -394,9 +399,8 @@ InModuleScope $ProjectName {
                     $Name -eq 'LoopbackAdapter'
                 }
             Mock -CommandName Get-NetAdapter `
-                -MockWith @script:adaptersWithOneLoopbackAdapter_mock `
                 -ParameterFilter {
-                    $Name -eq 'LoopbackAdapter'
+                    $Name -eq '*'
                 }
             Mock -CommandName Install-Devcon -MockWith {
                 @{
