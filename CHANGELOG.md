@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## Changed
+
+- Added pipeline support to `Remove-LoopbackAdapter`.
+
 ### Fixes
 
 - Fixed GitVersion to prevent build failures.

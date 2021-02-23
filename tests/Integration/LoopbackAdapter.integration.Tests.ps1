@@ -34,7 +34,7 @@ Describe 'LoopbackAdapter Module' -Tag 'Integration' {
 
     Context 'When removing a Loopback Adapter' {
         It 'Should not throw an exception' {
-            Remove-LoopbackAdapter -Name $script:testAdapterName -Force -Verbose
+            Get-LoopbackAdapter -Name $script:testAdapterName | Remove-LoopbackAdapter -Force -Verbose
         }
 
         It 'Should have removed the loopback adapter' {
