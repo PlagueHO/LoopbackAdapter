@@ -42,25 +42,10 @@ function New-LoopbackAdapter
     #>
     Write-Verbose -Message ($LocalizedData.CreatingLoopbackAdapterMessage -f $Name)
     $null = & $DevConExe @('install', "$($ENV:SystemRoot)\inf\netloop.inf", '*MSLOOP')
-
-    <#
-        Don't continue until:
-        1. DevCon.exe has finished, and
-        2. The registry entry for the adapter has been updated (Get-NetAdapter throws if
-            used before that operation is done).
-    #>
-    Get-Process -Name 'DevCon' -ErrorAction SilentlyContinue | Wait-Process -Timeout 5
-    $adapters = @()
-    while (-not $adapters) {
-        try {
-            $adapters = Get-NetAdapter -Name '*' -ErrorAction Stop
-        }
-        catch {
-            Start-Sleep -Milliseconds 500
-        }
-    }
+    Wait-ForDevconUpdate
 
     # Find the newly added Loopback Adapter
+    $adapters = Get-NetAdapter
     $adapter = $adapters |
         Where-Object -FilterScript {
             ($_.PnPDeviceID -notin $ExistingAdapters ) -and `

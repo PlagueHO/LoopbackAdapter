@@ -322,6 +322,7 @@ InModuleScope $ProjectName {
             Mock -CommandName Set-NetIPInterface
             Mock -CommandName Get-CimInstance -MockWith { '192.168.0.1' }
             Mock -CommandName Start-Sleep
+            Mock -CommandName Wait-ForDevconUpdate
 
             It 'Should not throw exception' {
                 {
@@ -356,11 +357,6 @@ InModuleScope $ProjectName {
                     $Name -eq 'LoopbackAdapter'
                 }
             Mock -CommandName Get-NetAdapter
-            Mock -CommandName Get-NetAdapter `
-                -ParameterFilter {
-                    $Name -eq '*'
-                } `
-                -MockWith @script:adaptersWithNoLoopbackAdapter_mock
             Mock -CommandName Install-Devcon -MockWith {
                 @{
                     FullName = 'devcon'
@@ -368,6 +364,7 @@ InModuleScope $ProjectName {
             }
             Mock -CommandName devcon
             Mock -CommandName Get-LoopbackAdapter -MockWith $script:adaptersWithOneLoopbackAdapter_mock
+            Mock -CommandName Wait-ForDevconUpdate
 
             It 'Should throw expected exception' {
                 {
@@ -398,16 +395,13 @@ InModuleScope $ProjectName {
                 -ParameterFilter {
                     $Name -eq 'LoopbackAdapter'
                 }
-            Mock -CommandName Get-NetAdapter `
-                -ParameterFilter {
-                    $Name -eq '*'
-                }
             Mock -CommandName Install-Devcon -MockWith {
                 @{
                     FullName = 'devcon'
                 }
             }
             Mock -CommandName devcon
+            Mock -CommandName Wait-ForDevconUpdate
 
             It 'Should not throw exception' {
                 {
@@ -462,6 +456,50 @@ InModuleScope $ProjectName {
 
             It 'Should call choco' {
                 Assert-MockCalled -CommandName Choco
+            }
+        }
+    }
+
+    Describe 'Wait-ForDevconUpdate' -Tag 'Unit' {
+        BeforeAll {
+            Mock -CommandName Get-Process
+            Mock -CommandName Wait-Process
+            Mock -CommandName Start-Sleep
+
+            $script:registryError = (
+                'Illegal operation attempted on a registry key that has been marked for deletion.'
+            )
+        }
+
+        Context 'When the registry is not updated right away but then updates' {
+            BeforeAll {
+                $script:getNetAdapterCounter = 0
+
+                Mock -CommandName Get-NetAdapter -MockWith {
+                    if ($script:getNetAdapterCounter -eq 0) {
+                        $script:getNetAdapterCounter++
+                        throw [Microsoft.Management.Infrastructure.CimException]::new($script:registryError)
+                    }
+                    else {
+                        $script:adaptersWithNoLoopbackAdapter_mock
+                    }
+                }
+            }
+
+            It 'Should not throw an exception' {
+                { Wait-ForDevconUpdate } | Should -Not -Throw $script:registryError
+            }
+        }
+
+        Context 'When the registry is not updated before the timeout' {
+            BeforeAll {
+                Mock -CommandName Get-NetAdapter -MockWith {
+                    throw [Microsoft.Management.Infrastructure.CimException]::new($script:registryError)
+                }
+            }
+
+            It 'Should throw an exception' {
+                { Wait-ForDevconUpdate -RegistryUpdateTimeout 1 } | Should -Throw $script:registryError
             }
         }
     }

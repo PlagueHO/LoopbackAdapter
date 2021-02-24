@@ -50,7 +50,7 @@ BuildWorkflow:
         $PowerShellExe = 'powershell'
       }
 
-      & $PowerShellExe -Command "`"$execute`""
+      & $PowerShellExe -NoProfile -Command "`"$execute`""
     }
 
   '.':

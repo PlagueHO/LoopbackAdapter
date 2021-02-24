@@ -43,26 +43,6 @@ function Remove-LoopbackAdapter
         #>
         Write-Verbose -Message ($LocalizedData.RemovingLoopbackAdapterMessage -f $Name)
         $null = & $devConExe @('remove',"@$($adapter.PnPDeviceID)")
-
-        <#
-            Don't continue until:
-            1. DevCon.exe has finished, and
-            2. The registry entry for the adapter has been updated (Get-NetAdapter throws if
-               used before that operation is done).
-        #>
-        Get-Process -Name 'DevCon' -ErrorAction SilentlyContinue | Wait-Process -Timeout 5
-        $registryUpdated = $false
-        while (-not $registryUpdated) {
-            try {
-                $adapterToRemove = Get-NetAdapter -Name '*' -ErrorAction Stop |
-                    Where-Object -FilterScript { $_.PnPDeviceID -contains $adapter.PnPDeviceID }
-                if ($null -eq $adapterToRemove) {
-                    $registryUpdated = $true
-                }
-            }
-            catch {
-                Start-Sleep -Milliseconds 500
-            }
-        }
+        Wait-ForDevconUpdate
     }
 } # function Remove-LoopbackAdapter
