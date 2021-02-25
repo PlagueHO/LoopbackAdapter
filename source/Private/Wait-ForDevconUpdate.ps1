@@ -25,11 +25,11 @@ function Wait-ForDevconUpdate
     param
     (
         [Parameter()]
-        [System.Int]
+        [Int]
         $DevconExeTimeout = 5,
 
         [Parameter()]
-        [System.Int]
+        [Int]
         $RegistryUpdateTimeout = 5
     )
 
