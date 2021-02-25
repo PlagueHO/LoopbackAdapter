@@ -24,28 +24,33 @@ function Wait-ForDevconUpdate
     [CmdletBinding()]
     param
     (
-        [int]$DevconExeTimeout = 5,
-        [int]$RegistryUpdateTimeout = 5
+        [Parameter()]
+        [System.Int]
+        $DevconExeTimeout = 5,
+
+        [Parameter()]
+        [System.Int]
+        $RegistryUpdateTimeout = 5
     )
 
     Get-Process -Name 'DevCon' -ErrorAction SilentlyContinue | Wait-Process -Timeout $DevconExeTimeout
     $registryUpdated = $false
     $registryTimer = 0
-    $waitIncrement = 500
+    $waitIncrement = 0.5
     while ($registryUpdated -eq $false)
     {
         try
         {
-            Get-NetAdapter -ErrorAction Stop *>&1 | Out-Null
+            $null = Get-NetAdapter -ErrorAction Stop *>&1
             $registryUpdated = $true
         }
         catch [Microsoft.Management.Infrastructure.CimException]
         {
-            if ($registryTimer -ge $RegistryUpdateTimeout * 1000)
+            if ($registryTimer -ge $RegistryUpdateTimeout)
             {
                 throw $_
             }
-            Start-Sleep -Milliseconds $waitIncrement
+            Start-Sleep -Seconds $waitIncrement
             $registryTimer += $waitIncrement
         }
     }

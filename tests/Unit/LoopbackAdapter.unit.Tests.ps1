@@ -471,6 +471,18 @@ InModuleScope $ProjectName {
             )
         }
 
+        Context 'When the registry is updated right away' {
+            BeforeAll {
+                Mock -CommandName Get-NetAdapter -MockWith {
+                    $script:adaptersWithNoLoopbackAdapter_mock
+                }
+            }
+
+            It 'Should not throw an exception' {
+                { Wait-ForDevconUpdate } | Should -Not -Throw $script:registryError
+            }
+        }
+
         Context 'When the registry is not updated right away but then updates' {
             BeforeAll {
                 $script:getNetAdapterCounter = 0
@@ -486,8 +498,9 @@ InModuleScope $ProjectName {
                 }
             }
 
-            It 'Should not throw an exception' {
+            It 'Should catch the expected error and not throw an exception' {
                 { Wait-ForDevconUpdate } | Should -Not -Throw $script:registryError
+                $script:getNetAdapterCounter | Should -BeGreaterThan 0
             }
         }
 
