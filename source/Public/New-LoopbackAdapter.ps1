@@ -42,6 +42,7 @@ function New-LoopbackAdapter
     #>
     Write-Verbose -Message ($LocalizedData.CreatingLoopbackAdapterMessage -f $Name)
     $null = & $DevConExe @('install', "$($ENV:SystemRoot)\inf\netloop.inf", '*MSLOOP')
+    Wait-ForDevconUpdate
 
     # Find the newly added Loopback Adapter
     $adapters = Get-NetAdapter

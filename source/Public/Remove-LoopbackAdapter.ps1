@@ -43,5 +43,6 @@ function Remove-LoopbackAdapter
         #>
         Write-Verbose -Message ($LocalizedData.RemovingLoopbackAdapterMessage -f $Name)
         $null = & $devConExe @('remove',"@$($adapter.PnPDeviceID)")
+        Wait-ForDevconUpdate
     }
 } # function Remove-LoopbackAdapter

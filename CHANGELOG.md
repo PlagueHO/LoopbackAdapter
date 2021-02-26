@@ -7,12 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## Changed
+### Changed
 
 - Added pipeline support to `Remove-LoopbackAdapter`.
 
 ### Fixes
 
+- Fix error generated from DevCon still updating the registry.
 - Fixed GitVersion to prevent build failures.
 - Convert build pipeline to use GitTools Azure DevOps extension tasks
   instead of deprecated GitVersion extension.

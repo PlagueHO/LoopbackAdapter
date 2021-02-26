@@ -13,6 +13,15 @@ Import-Module -Name $ProjectName -Force
 Describe 'LoopbackAdapter Module' -Tag 'Integration' {
     BeforeAll {
         $script:testAdapterName = 'Test Loopback Adapter'
+        Get-LoopbackAdapter |
+            Where-Object -FilterScript { $_.Name -match $script:testAdapterName } |
+            Remove-LoopbackAdapter -Force
+    }
+
+    AfterAll {
+        Get-LoopbackAdapter |
+            Where-Object -FilterScript { $_.Name -match $script:testAdapterName } |
+            Remove-LoopbackAdapter -Force
     }
 
     Context 'When installing a Loopback Adapter' {
@@ -39,6 +48,26 @@ Describe 'LoopbackAdapter Module' -Tag 'Integration' {
 
         It 'Should have removed the loopback adapter' {
             Get-NetAdapter | Where-Object -FilterScript { $_.Name -eq  $script:testAdapterName } | Should -BeNullOrEmpty
+        }
+    }
+
+    Context 'When installing and removing multiple adapters' {
+        It 'should not throw an exception when using the same name' {
+            for ($i = 0; $i -lt 3; $i++) {
+                { New-LoopbackAdapter -Name $script:testAdapterName -Force | Remove-LoopbackAdapter -Force } |
+                    Should -Not -Throw
+            }
+        }
+
+        It 'should not throw an exception when removing several adapters at once' {
+            for ($i = 0; $i -lt 3; $i++) {
+                New-LoopbackAdapter -Name "$script:testAdapterName $($i + 1)" -Force
+            }
+            {
+                Get-LoopbackAdapter |
+                    Where-Object -FilterScript { $_.Name -match $script:testAdapterName } |
+                    Remove-LoopbackAdapter -Force
+            } | Should -Not -Throw
         }
     }
 }
