@@ -25,11 +25,11 @@ function Wait-ForDevconUpdate
     param
     (
         [Parameter()]
-        [Int]
+        [System.Int32]
         $DevconExeTimeout = 5,
 
         [Parameter()]
-        [Int]
+        [System.Int32]
         $RegistryUpdateTimeout = 5
     )
 
@@ -37,6 +37,7 @@ function Wait-ForDevconUpdate
     $registryUpdated = $false
     $registryTimer = 0
     $waitIncrement = 0.5
+
     while ($registryUpdated -eq $false)
     {
         try
@@ -50,6 +51,7 @@ function Wait-ForDevconUpdate
             {
                 throw $_
             }
+
             Start-Sleep -Seconds $waitIncrement
             $registryTimer += $waitIncrement
         }
