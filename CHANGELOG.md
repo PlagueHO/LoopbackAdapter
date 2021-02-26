@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix build problems preventing help from being compiled and added
   to the module.
 - Fix the XML help file output path.
+- Fix CI pipeline deployment stage.
 
 ## [1.3.0] - 2020-08-30
 
